@@ -1,0 +1,35 @@
+STORYBOARD
+Scene:
+Treatment: (penjelasan pola interaktivitas yang terjadi pada layar)
+ 
+ 
+Visual:
+ 
+Narasi/dialog:
+ 
+Suara
+Interaksi (bisa lebih dari satu aksi)
+SFX
+ 
+Normal
+ 
+Musik
+ 
+Hover
+ 
+Latar (ambience)
+ 
+Hit
+ 
+ 
+ 
+Swipe
+ 
+ 
+ 
+Show
+ 
+ 
+ 
+Drag/drop
+ 

@@ -1,0 +1,2546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="description" content="AutoMaster — Bengkel Virtual SMK: Game edukasi interaktif untuk mempelajari sistem otomotif kendaraan ringan. Belajar, simulasi, dan kuis dalam satu platform digital.">
+  <meta name="keywords" content="AutoMaster, bengkel virtual, SMK, otomotif, kendaraan ringan, game edukasi, bahan ajar digital, sistem rem, mesin kendaraan, kelistrikan">
+  <meta name="author" content="Imam Saputra, S.T. — SMK Amal Bakti Jatimulyo">
+  <meta name="theme-color" content="#0a0e17">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Perawatan Otomotif TKR di Bengkel Virtual AutoMaster</title>
+
+  <!-- Local Fonts (Offline-Ready Compliance) -->
+  <link rel="stylesheet" href="css/fonts.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css?v=2.6">
+
+  <!-- Local Chart.js (Offline-Ready Compliance) -->
+  <script src="js/chart.min.js"></script>
+
+  <!-- Favicon (inline SVG as data URI) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23ff6b35'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='white'%3E🔧%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- TEMPORARY DEBUG ERROR CONSOLE -->
+  <div id="debug-error-console" style="position: fixed; top: 0; left: 0; right: 0; background: #dc3545; color: white; padding: 15px; z-index: 1000000; font-family: monospace; display: none; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); overflow-y: auto; max-height: 200px;">
+    <strong>[JavaScript Error Alert]</strong><br>
+    <div id="debug-error-list"></div>
+    <button onclick="this.parentNode.style.display='none'" style="margin-top: 10px; background: white; color: black; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Tutup</button>
+  </div>
+  <script>
+    window.addEventListener('error', function(e) {
+      var consoleEl = document.getElementById('debug-error-console');
+      var listEl = document.getElementById('debug-error-list');
+      if (consoleEl && listEl) {
+        consoleEl.style.display = 'block';
+        var errDiv = document.createElement('div');
+        errDiv.style.borderBottom = '1px solid rgba(255,255,255,0.3)';
+        errDiv.style.padding = '5px 0';
+        errDiv.textContent = e.message + ' at ' + e.filename + ':' + e.lineno + ':' + e.colno;
+        listEl.appendChild(errDiv);
+      }
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      var consoleEl = document.getElementById('debug-error-console');
+      var listEl = document.getElementById('debug-error-list');
+      if (consoleEl && listEl) {
+        consoleEl.style.display = 'block';
+        var errDiv = document.createElement('div');
+        errDiv.style.borderBottom = '1px solid rgba(255,255,255,0.3)';
+        errDiv.style.padding = '5px 0';
+        errDiv.textContent = 'Unhandled Rejection: ' + (e.reason ? (e.reason.message || e.reason) : e);
+        listEl.appendChild(errDiv);
+      }
+    });
+  </script>
+
+  <!-- ═══════════════════════════════════════════════════════
+       LOADING OVERLAY
+       ═══════════════════════════════════════════════════════ -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Memuat AutoMaster…</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       APP CONTAINER
+       ═══════════════════════════════════════════════════════ -->
+  <div id="app">
+    <div class="fluid-bg-left"></div>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 0 — LOGIN
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-login" class="screen active">
+      <div class="auth-container">
+        <div class="auth-card">
+          <div class="auth-logo" style="margin-bottom: var(--sp-md); display: flex; justify-content: center; transform: scale(1.15);">
+            <svg width="80" height="80" viewBox="0 0 100 100" style="filter: drop-shadow(0 6px 12px rgba(13, 148, 136, 0.15));">
+              <!-- Outer Gear (Rotates) -->
+              <g style="animation: spin-clockwise 10s linear infinite; transform-origin: 50px 50px;">
+                <circle cx="50" cy="50" r="32" fill="none" stroke="var(--clr-secondary)" stroke-width="6" />
+                <path d="M 50 12 L 50 4 M 50 88 L 50 96 M 12 50 L 4 50 M 88 50 L 96 50 M 23 23 L 17 17 M 77 77 L 83 83 M 23 77 L 17 83 M 77 23 L 83 17" stroke="var(--clr-secondary)" stroke-width="6" stroke-linecap="round" />
+              </g>
+              <!-- Inner circles -->
+              <circle cx="50" cy="50" r="24" fill="#ffffff" stroke="var(--clr-primary)" stroke-width="2" />
+              <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(13, 148, 136, 0.1)" stroke-width="4" />
+              <!-- Crossed Wrench & Screwdriver -->
+              <g transform="translate(50, 50) scale(0.8)">
+                <path d="M -22 -12 L 12 22" stroke="var(--clr-secondary)" stroke-width="6" stroke-linecap="round" />
+                <circle cx="-22" cy="-12" r="7" fill="var(--clr-secondary)" />
+                <circle cx="-22" cy="-12" r="3.5" fill="#ffffff" />
+                <path d="M -12 22 L 22 -12" stroke="var(--clr-accent)" stroke-width="5" stroke-linecap="round" />
+                <path d="M -15 25 L -22 32" stroke="#475569" stroke-width="8" stroke-linecap="round" />
+              </g>
+              <!-- Center car silhouette -->
+              <path d="M 36 54 L 41 46 C 43 43 47 42 50 42 L 60 42 C 63 42 66 44 68 47 L 73 54 C 75 56 74 60 70 60 L 39 60 C 35 60 34 56 36 54 Z" fill="var(--clr-primary)" style="animation: car-bounce 3s ease-in-out infinite; transform-origin: 50px 50px;" />
+              <circle cx="44" cy="60" r="4" fill="#1e293b" />
+              <circle cx="44" cy="60" r="1.5" fill="#ffffff" />
+              <circle cx="65" cy="60" r="4" fill="#1e293b" />
+              <circle cx="65" cy="60" r="1.5" fill="#ffffff" />
+            </svg>
+          </div>
+          <h2 class="auth-title">AutoMaster</h2>
+          <p class="auth-subtitle" id="auth-subtitle">Login Siswa — Bengkel Virtual</p>
+          
+          <!-- FORM LOGIN SISWA -->
+          <form id="form-login" onsubmit="event.preventDefault();">
+            <div class="auth-form-group">
+              <label for="login-nis">NIS (Nomor Induk Siswa)</label>
+              <input type="text" id="login-nis" placeholder="Masukkan NIS Anda" required autocomplete="username">
+            </div>
+            
+            <div class="auth-form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" placeholder="Masukkan Password" required autocomplete="current-password" value="user123">
+            </div>
+            
+            <div class="auth-btn-container">
+              <button type="submit" id="btn-login-submit" class="btn btn-primary btn-lg" style="width: 100%; margin-bottom: 10px;">Masuk Siswa 🚀</button>
+              <button type="button" id="btn-bypass-login" class="btn btn-secondary btn-lg" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--text-secondary);">Bermain Offline (Mode Tamu) 🔧</button>
+            </div>
+          </form>
+
+          <!-- FORM LOGIN GURU -->
+          <form id="form-teacher-login" onsubmit="event.preventDefault();" style="display: none;">
+            <div class="auth-form-group">
+              <label for="teacher-password">Password Rahasia Guru</label>
+              <input type="password" id="teacher-password" placeholder="Masukkan Password Guru" required autocomplete="current-password">
+            </div>
+            
+            <div class="auth-btn-container">
+              <button type="submit" id="btn-teacher-login-submit" class="btn btn-secondary btn-lg" style="width: 100%;">Masuk Dasbor Guru 🧑‍🏫</button>
+            </div>
+          </form>
+          
+          <p class="auth-switch-text" id="auth-switch-container">
+            <span id="student-reg-info">Belum punya akun? <a id="link-to-register" style="color: var(--clr-primary); font-weight: 600; cursor: pointer; text-decoration: underline;">Daftar Sekarang</a><br></span>
+            <span id="teacher-reg-info" style="display: none; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; text-align: center;">
+              🔑 <strong>Aktivasi Akun Guru?</strong> Guru tidak perlu mendaftar. Gunakan Password Rahasia yang diatur di Apps Script Anda. Hubungi Administrator (WA: 085664236522) jika Anda memerlukan bantuan setup database.<br>
+            </span>
+            <a id="link-forgot-password" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--text-muted); cursor: pointer; text-decoration: underline;">Lupa Password? 🔑</a><br>
+            <a id="link-to-teacher-login" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--clr-secondary); cursor: pointer; text-decoration: underline; font-weight: 500;">Masuk sebagai Guru 🧑‍🏫</a><br>
+            <a id="link-to-landing-from-login" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--text-muted); cursor: pointer; text-decoration: underline; font-weight: 500;">← Kembali ke Panduan / Landing</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 0.1 — REGISTER
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-register" class="screen">
+      <div class="auth-container">
+        <div class="auth-card">
+          <div class="auth-logo" style="margin-bottom: var(--sp-md); display: flex; justify-content: center; transform: scale(1.15);">
+            <svg width="80" height="80" viewBox="0 0 100 100" style="filter: drop-shadow(0 6px 12px rgba(13, 148, 136, 0.15));">
+              <!-- Outer Gear (Rotates) -->
+              <g style="animation: spin-clockwise 10s linear infinite; transform-origin: 50px 50px;">
+                <circle cx="50" cy="50" r="32" fill="none" stroke="var(--clr-secondary)" stroke-width="6" />
+                <path d="M 50 12 L 50 4 M 50 88 L 50 96 M 12 50 L 4 50 M 88 50 L 96 50 M 23 23 L 17 17 M 77 77 L 83 83 M 23 77 L 17 83 M 77 23 L 83 17" stroke="var(--clr-secondary)" stroke-width="6" stroke-linecap="round" />
+              </g>
+              <!-- Inner circles -->
+              <circle cx="50" cy="50" r="24" fill="#ffffff" stroke="var(--clr-primary)" stroke-width="2" />
+              <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(13, 148, 136, 0.1)" stroke-width="4" />
+              <!-- Crossed Wrench & Screwdriver -->
+              <g transform="translate(50, 50) scale(0.8)">
+                <path d="M -22 -12 L 12 22" stroke="var(--clr-secondary)" stroke-width="6" stroke-linecap="round" />
+                <circle cx="-22" cy="-12" r="7" fill="var(--clr-secondary)" />
+                <circle cx="-22" cy="-12" r="3.5" fill="#ffffff" />
+                <path d="M -12 22 L 22 -12" stroke="var(--clr-accent)" stroke-width="5" stroke-linecap="round" />
+                <path d="M -15 25 L -22 32" stroke="#475569" stroke-width="8" stroke-linecap="round" />
+              </g>
+              <!-- Center car silhouette -->
+              <path d="M 36 54 L 41 46 C 43 43 47 42 50 42 L 60 42 C 63 42 66 44 68 47 L 73 54 C 75 56 74 60 70 60 L 39 60 C 35 60 34 56 36 54 Z" fill="var(--clr-primary)" style="animation: car-bounce 3s ease-in-out infinite; transform-origin: 50px 50px;" />
+              <circle cx="44" cy="60" r="4" fill="#1e293b" />
+              <circle cx="44" cy="60" r="1.5" fill="#ffffff" />
+              <circle cx="65" cy="60" r="4" fill="#1e293b" />
+              <circle cx="65" cy="60" r="1.5" fill="#ffffff" />
+            </svg>
+          </div>
+          <h2 class="auth-title">Daftar Akun</h2>
+          <p class="auth-subtitle">Registrasi Mandiri Siswa TKR</p>
+          
+          <form id="form-register" onsubmit="event.preventDefault();">
+            <div class="auth-form-group">
+              <label for="register-nis">NIS (Nomor Induk Siswa)</label>
+              <input type="text" id="register-nis" placeholder="Contoh: 12345 (4-10 digit)" required>
+            </div>
+            
+            <div class="auth-form-group">
+              <label for="register-nama">Nama Lengkap</label>
+              <input type="text" id="register-nama" placeholder="Nama Lengkap Anda" required>
+            </div>
+            
+            <div class="auth-form-group">
+              <label for="register-kelas">Kelas</label>
+              <select id="register-kelas" required>
+                <option value="" disabled selected>Pilih Kelas Anda</option>
+                <option value="X TKR 1">Kelas X TKR 1</option>
+                <option value="X TKR 2">Kelas X TKR 2</option>
+                <option value="X TKR 3">Kelas X TKR 3</option>
+                <option value="XI TKR 1">Kelas XI TKR 1</option>
+                <option value="XI TKR 2">Kelas XI TKR 2</option>
+                <option value="XII TKR 1">Kelas XII TKR 1</option>
+              </select>
+            </div>
+            
+            <div class="auth-form-group">
+              <label for="register-wa">Nomor WhatsApp</label>
+              <input type="text" id="register-wa" placeholder="Contoh: 081234567890" required>
+            </div>
+            
+            <div class="auth-form-group">
+              <label for="register-password">Password</label>
+              <input type="password" id="register-password" placeholder="Minimal 6 karakter" required autocomplete="new-password" value="user123">
+            </div>
+            
+            <div class="auth-btn-container">
+              <button type="submit" id="btn-register-submit" class="btn btn-primary btn-lg">Daftar 🚀</button>
+            </div>
+          </form>
+          
+          <p class="auth-switch-text">
+            Sudah punya akun? <a id="link-to-login">Kembali Login</a><br>
+            <a id="link-to-landing-from-register" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--text-muted); cursor: pointer; text-decoration: underline; font-weight: 500;">← Kembali ke Panduan / Landing</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 1 — LANDING / WELCOME DASHBOARD
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-landing" class="screen">
+      <div class="welcome-container">
+        
+        <!-- Offline CORS Warning Banner -->
+        <div id="offline-cors-warning-banner" class="alert-banner" style="display: none; background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(245, 158, 11, 0.12) 100%); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 12px; padding: 16px; margin-bottom: 24px; color: var(--text-primary); text-align: left; box-sizing: border-box; width: 100%;">
+          <div style="display: flex; gap: 12px; align-items: flex-start;">
+            <span style="font-size: 1.5rem; line-height: 1;">⚠️</span>
+            <div style="flex: 1;">
+              <h4 style="margin: 0 0 6px 0; color: #ef4444; font-weight: 700; font-size: 0.95rem;">Peringatan Akses File Lokal (CORS)</h4>
+              <p style="margin: 0; font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+                Anda membuka game langsung dengan mengklik file HTML (<strong>file://</strong>). Browser Google Chrome atau Microsoft Edge memblokir pemutaran animasi Flash offline secara default karena kebijakan keamanan.
+                <br><strong style="color: var(--text-primary);">Solusi Kerja Offline:</strong> Silakan tutup tab ini, lalu jalankan game dengan mengklik ganda file <strong style="color: #f59e0b; background: rgba(245,158,11,0.06); padding: 2px 6px; border-radius: 4px; font-family: monospace;">JALANKAN_GAME.bat</strong> di folder game Anda agar semua animasi berjalan lancar!
+              </p>
+            </div>
+            <button type="button" onclick="document.getElementById('offline-cors-warning-banner').style.display='none'" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; line-height: 1; padding: 0 4px;">&times;</button>
+          </div>
+        </div>
+
+        <!-- Welcome Hero Card -->
+        <div class="welcome-hero">
+          <!-- Decorative shapes inside hero -->
+          <div class="welcome-fluid-decor-1"></div>
+          <div class="welcome-fluid-decor-2"></div>
+          
+          <div style="max-width: 800px; margin: 0 auto; position: relative; z-index: 2;">
+            <div class="welcome-badge" style="background: rgba(13, 148, 136, 0.1); color: var(--clr-secondary); padding: 6px 16px; border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: var(--sp-md);">
+              TEKNIK KENDARAAN RINGAN (TKR)
+            </div>
+            <!-- Logo Emblem -->
+            <div class="welcome-logo-container" style="margin-bottom: var(--sp-md); display: flex; justify-content: center; align-items: center;">
+              <svg width="100" height="100" viewBox="0 0 100 100" style="filter: drop-shadow(0 8px 16px rgba(13, 148, 136, 0.15));">
+                <!-- Outer Gear (Rotates) -->
+                <g style="animation: spin-clockwise 10s linear infinite; transform-origin: 50px 50px;">
+                  <circle cx="50" cy="50" r="32" fill="none" stroke="var(--clr-secondary)" stroke-width="6" />
+                  <path d="M 50 12 L 50 4 M 50 88 L 50 96 M 12 50 L 4 50 M 88 50 L 96 50 M 23 23 L 17 17 M 77 77 L 83 83 M 23 77 L 17 83 M 77 23 L 83 17" stroke="var(--clr-secondary)" stroke-width="6" stroke-linecap="round" />
+                </g>
+                <!-- Inner circles -->
+                <circle cx="50" cy="50" r="24" fill="#ffffff" stroke="var(--clr-primary)" stroke-width="2" />
+                <circle cx="50" cy="50" r="20" fill="none" stroke="rgba(13, 148, 136, 0.1)" stroke-width="4" />
+                <!-- Crossed Wrench & Screwdriver -->
+                <g transform="translate(50, 50) scale(0.8)">
+                  <path d="M -22 -12 L 12 22" stroke="var(--clr-secondary)" stroke-width="6" stroke-linecap="round" />
+                  <circle cx="-22" cy="-12" r="7" fill="var(--clr-secondary)" />
+                  <circle cx="-22" cy="-12" r="3.5" fill="#ffffff" />
+                  <path d="M -12 22 L 22 -12" stroke="var(--clr-accent)" stroke-width="5" stroke-linecap="round" />
+                  <path d="M -15 25 L -22 32" stroke="#475569" stroke-width="8" stroke-linecap="round" />
+                </g>
+                <!-- Center car silhouette -->
+                <path d="M 36 54 L 41 46 C 43 43 47 42 50 42 L 60 42 C 63 42 66 44 68 47 L 73 54 C 75 56 74 60 70 60 L 39 60 C 35 60 34 56 36 54 Z" fill="var(--clr-primary)" style="animation: car-bounce 3s ease-in-out infinite; transform-origin: 50px 50px;" />
+                <circle cx="44" cy="60" r="4" fill="#1e293b" />
+                <circle cx="44" cy="60" r="1.5" fill="#ffffff" />
+                <circle cx="65" cy="60" r="4" fill="#1e293b" />
+                <circle cx="65" cy="60" r="1.5" fill="#ffffff" />
+              </svg>
+            </div>
+            
+            <h1 class="welcome-hero-title">
+              Selamat Datang di AutoMaster!
+            </h1>
+            <p style="font-size: clamp(1rem, 2.5vw, 1.25rem); font-weight: 600; color: var(--text-secondary); margin-bottom: var(--sp-md); max-width: 620px; margin-left: auto; margin-right: auto;">
+              Gim Edukasi Interaktif Multimedia Teknik Kendaraan Ringan (TKR)
+            </p>
+            <p style="font-size: 0.95rem; color: var(--text-muted); max-width: 680px; margin: 0 auto; line-height: 1.7;">
+              Pernahkah kamu penasaran bagaimana mesin kendaraan bekerja atau bagaimana sistem rem menghentikan mobil berkecepatan tinggi? Di AutoMaster, kamu akan mempelajari rahasia mesin otomotif secara mendalam! Melalui simulasi perakitan 3D interaktif yang seru dan tantangan kuis yang memicu adrenalin, kamu bisa langsung mempraktikkan keterampilan perawatan dan diagnosis mesin layaknya di bengkel nyata. Dapatkan pengalaman belajar yang menyenangkan tanpa tekanan, dan bersiaplah bertransformasi dari mekanik pemula menjadi Master Mekanik yang andal di masa depan. Mari mulai petualangan belajarmu sekarang!
+            </p>
+          </div>
+        </div>
+
+        <!-- Features Grid -->
+        <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-primary); margin-bottom: var(--sp-xl); display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <span>🛠️</span> Modul Pembelajaran Utama
+        </h2>
+        
+        <div class="welcome-features-grid">
+          
+          <!-- Feature 1: Belajar -->
+          <div class="welcome-card-feat">
+            <div class="welcome-anim-box" style="background: rgba(13, 148, 136, 0.03); border: 1px dashed rgba(13, 148, 136, 0.15);">
+              <!-- Animated Book SVG (Interactive/Looping GIF replacement) -->
+              <svg width="120" height="120" viewBox="0 0 120 120" class="svg-anim-book">
+                <defs>
+                  <pattern id="grid-pattern-1" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(13, 148, 136, 0.05)" stroke-width="1" />
+                  </pattern>
+                </defs>
+                <rect width="120" height="120" fill="url(#grid-pattern-1)" rx="10" />
+                <g transform="translate(10, 15)">
+                  <!-- Book shadow -->
+                  <path d="M 10 85 Q 50 92 100 85 L 100 15 Q 50 22 10 15 Z" fill="rgba(0,0,0,0.1)" filter="blur(2px)" />
+                  <!-- Cover Back -->
+                  <path d="M 7 86 Q 50 94 103 86 L 103 12 Q 50 20 7 12 Z" fill="#0f766e" />
+                  <!-- Pages Right -->
+                  <path d="M 50 82 Q 75 79 98 82 L 98 16 Q 75 13 50 16 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+                  <path d="M 50 82 Q 72 80 95 82 L 95 18 Q 72 16 50 18 Z" fill="#ffffff" />
+                  <!-- Pages Left -->
+                  <path d="M 50 82 Q 25 79 12 82 L 12 16 Q 25 13 50 16 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="1" />
+                  <path d="M 50 82 Q 28 80 15 82 L 15 18 Q 28 16 50 18 Z" fill="#ffffff" />
+                  <!-- Book Spine -->
+                  <path d="M 50 83 L 50 15" stroke="#0d9488" stroke-width="3" stroke-linecap="round" />
+                  <!-- Flipping Page -->
+                  <path d="M 50 16 Q 72 14 90 20 L 90 82 Q 72 78 50 82" fill="#fafafa" stroke="#e2e8f0" stroke-width="1" style="animation: page-flip-right 2.5s ease-in-out infinite; transform-origin: 50px 50px; backface-visibility: hidden; fill-opacity: 0.95;" />
+                  <!-- Text lines on pages (animated draw) -->
+                  <line x1="20" y1="30" x2="40" y2="30" stroke="#f97316" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="20" style="animation: line-draw 3s infinite;" />
+                  <line x1="20" y1="42" x2="35" y2="42" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-dasharray="15" style="animation: line-draw 3s infinite 0.5s;" />
+                  <line x1="20" y1="54" x2="42" y2="54" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-dasharray="22" style="animation: line-draw 3s infinite 1s;" />
+                  
+                  <line x1="60" y1="30" x2="80" y2="30" stroke="#0d9488" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="20" style="animation: line-draw 3s infinite 0.2s;" />
+                  <line x1="60" y1="42" x2="78" y2="42" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-dasharray="18" style="animation: line-draw 3s infinite 0.7s;" />
+                  <line x1="60" y1="54" x2="75" y2="54" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-dasharray="15" style="animation: line-draw 3s infinite 1.2s;" />
+                  <!-- Tiny gear in corner -->
+                  <g transform="translate(85, 70) scale(0.65)" style="animation: spin-clockwise 6s linear infinite; transform-origin: center;">
+                    <circle cx="0" cy="0" r="8" fill="none" stroke="#f97316" stroke-width="3" />
+                    <path d="M 0 -8 L 0 -11 M 0 8 L 0 11 M -8 0 L -11 0 M 8 0 L 11 0" stroke="#f97316" stroke-width="2" stroke-linecap="round" />
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--clr-secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                <span>📚</span> Belajar Interaktif
+              </h3>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);">
+                Pelajari materi otomotif Kurikulum Merdeka yang disajikan secara terstruktur dan terintegrasi dengan <strong>177 simulasi animasi interaktif (Flash/Ruffle)</strong> untuk memvisualisasikan teori sistem kemudi, mesin 4-tak, rem, dan kelistrikan.
+              </p>
+            </div>
+          </div>
+
+          <!-- Feature 2: Simulasi -->
+          <div class="welcome-card-feat">
+            <div class="welcome-anim-box" style="background: rgba(249, 115, 22, 0.03); border: 1px dashed rgba(249, 115, 22, 0.15);">
+              <!-- Animated Wrench & Wheel SVG (Interactive/Looping GIF replacement) -->
+              <svg width="120" height="120" viewBox="0 0 120 120" class="svg-anim-car">
+                <rect width="120" height="120" fill="none" rx="10" />
+                <!-- Blueprint lines -->
+                <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(249, 115, 22, 0.04)" stroke-dasharray="4, 4" stroke-width="1.5" />
+                <line x1="10" y1="60" x2="110" y2="60" stroke="rgba(249, 115, 22, 0.04)" stroke-dasharray="4, 4" stroke-width="1.5" />
+                <line x1="60" y1="10" x2="60" y2="110" stroke="rgba(249, 115, 22, 0.04)" stroke-dasharray="4, 4" stroke-width="1.5" />
+                <!-- Wheel assembly (bounces) -->
+                <g style="animation: car-bounce 2s ease-in-out infinite;">
+                  <!-- Outer Tyre -->
+                  <circle cx="60" cy="60" r="38" fill="none" stroke="#1e293b" stroke-width="8" />
+                  <circle cx="60" cy="60" r="32" fill="none" stroke="#475569" stroke-width="2" />
+                  <!-- Hub -->
+                  <circle cx="60" cy="60" r="22" fill="#cbd5e1" stroke="#94a3b8" stroke-width="2" />
+                  <circle cx="60" cy="60" r="12" fill="#94a3b8" stroke="#475569" stroke-width="2" />
+                  <circle cx="60" cy="60" r="6" fill="#64748b" />
+                  <!-- Lug Nuts -->
+                  <circle cx="60" cy="48" r="2.5" fill="#f8fafc" stroke="#334155" stroke-width="1" />
+                  <circle cx="60" cy="72" r="2.5" fill="#f8fafc" stroke="#334155" stroke-width="1" />
+                  <circle cx="48" cy="60" r="2.5" fill="#f8fafc" stroke="#334155" stroke-width="1" />
+                  <circle cx="72" cy="60" r="2.5" fill="#f8fafc" stroke="#334155" stroke-width="1" />
+                </g>
+                <!-- Wrench (tightens bolts) -->
+                <g transform="translate(60, 48)" style="animation: wrench-tighten 2s ease-in-out infinite; transform-origin: 0px 0px;">
+                  <g transform="translate(0, -5)">
+                    <!-- Handle -->
+                    <path d="M 0 0 L 35 -15" stroke="#0d9488" stroke-width="7" stroke-linecap="round" />
+                    <path d="M 0 0 L 35 -15" stroke="#14b8a6" stroke-width="3" stroke-linecap="round" />
+                    <!-- Head -->
+                    <circle cx="0" cy="0" r="8" fill="#0d9488" />
+                    <circle cx="0" cy="0" r="5" fill="#e2e8f0" />
+                  </g>
+                </g>
+                <!-- Sparkles -->
+                <circle cx="60" cy="48" r="2" fill="#ffc300" style="animation: check-pulse 2s infinite; transform-origin: 60px 48px;" />
+              </svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--clr-primary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                <span>🔧</span> Simulasi Perakitan
+              </h3>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);">
+                Uji keterampilan motorik dan pemahaman komponen Anda. Seret (drag) suku cadang mesin, rem, kelistrikan dari kotak alat (toolbox) dan letakkan (drop) pada rangka cetak biru neon otomotif yang presisi.
+              </p>
+            </div>
+          </div>
+
+          <!-- Feature 3: Kuis -->
+          <div class="welcome-card-feat">
+            <div class="welcome-anim-box" style="background: rgba(132, 204, 22, 0.03); border: 1px dashed rgba(132, 204, 22, 0.15);">
+              <!-- Animated Quiz SVG (Interactive/Looping GIF replacement) -->
+              <svg width="120" height="120" viewBox="0 0 120 120" class="svg-anim-quiz">
+                <rect width="120" height="120" fill="none" rx="10" />
+                <g transform="translate(25, 15)">
+                  <!-- Clipboard -->
+                  <rect x="5" y="10" width="60" height="80" rx="8" fill="rgba(0,0,0,0.1)" />
+                  <rect x="3" y="7" width="60" height="80" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="2" />
+                  <path d="M 23 7 L 43 7 L 40 0 L 26 0 Z" fill="#64748b" />
+                  <!-- Lines and checkmarks -->
+                  <rect x="12" y="22" width="8" height="8" rx="2" fill="none" stroke="#84cc16" stroke-width="2" />
+                  <line x1="26" y1="26" x2="52" y2="26" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" />
+                  <path d="M 10 25 L 15 30 L 22 19" fill="none" stroke="#84cc16" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: check-pulse 2.5s infinite; transform-origin: 15px 25px;" />
+                  
+                  <rect x="12" y="42" width="8" height="8" rx="2" fill="none" stroke="#84cc16" stroke-width="2" />
+                  <line x1="26" y1="46" x2="48" y2="46" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" />
+                  <path d="M 10 45 L 15 50 L 22 39" fill="none" stroke="#84cc16" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation: check-pulse 2.5s infinite 0.8s; transform-origin: 15px 45px;" />
+                </g>
+                <!-- Star bouncing -->
+                <g transform="translate(90, 40)" style="animation: star-bounce 2s ease-in-out infinite;">
+                  <path d="M 0 -12 L 3.5 -3.5 L 11.5 -3.5 L 5 1.5 L 7.5 9.5 L 0 5 L -7.5 9.5 L -5 1.5 L -11.5 -3.5 L -3.5 -3.5 Z" fill="#ffc300" stroke="#f59e0b" stroke-width="1.5" />
+                </g>
+                <!-- Timer wheel -->
+                <g transform="translate(90, 85) scale(0.8)">
+                  <circle cx="0" cy="0" r="14" fill="#ffffff" stroke="#f97316" stroke-width="2.5" />
+                  <line x1="0" y1="0" x2="0" y2="-9" stroke="#1e293b" stroke-width="2" stroke-linecap="round" style="animation: spin-clockwise 4s linear infinite; transform-origin: 0px 0px;" />
+                </g>
+              </svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--clr-accent); margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                <span>🏆</span> Kuis & Papan Skor
+              </h3>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary);">
+                Uji pemahaman teoretis di akhir setiap modul. Jawab tantangan kuis secepat mungkin sebelum waktu habis untuk mengumpulkan XP, lencana (badge), dan memantau peringkat live kelas Anda di papan skor!
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Cakupan Kompetensi Keahlian TKR Section -->
+        <div class="welcome-steps-section" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(13, 148, 136, 0.05) 100%); border-color: rgba(139, 92, 246, 0.15);">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #8b5cf6; padding-bottom: 8px; margin-bottom: var(--sp-md); flex-wrap: wrap; gap: 8px;">
+            <h3 style="font-size: 1.25rem; font-weight: 900; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+              <span>🎯</span> Cakupan Kompetensi &amp; Materi Sayembara (Materi IV)
+            </h3>
+            <span style="font-size: 0.75rem; font-weight: 800; color: #8b5cf6; background: rgba(139, 92, 246, 0.08); padding: 4px 12px; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.5px;">KURIKULUM MERDEKA TKR</span>
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--sp-lg); line-height: 1.6;">
+            Gim ini telah diselaraskan secara penuh dengan silabus <strong>Materi IV: Komponen Otomotif</strong>. Berikut adalah pemetaan materi pembelajaran utama beserta sub-kompetensi yang dapat Anda jelajahi:
+          </p>
+
+          <div class="welcome-steps-grid">
+            <!-- Kartu 1: Komponen Otomotif (Materi IV) -->
+            <div class="welcome-step-card" style="width: 100%; box-sizing: border-box;">
+              <div class="welcome-step-badge purple" style="background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);">🔧</div>
+              <div class="welcome-step-info" style="width: 100%;">
+                <h4 style="color: #8b5cf6;">Komponen Otomotif (Materi IV)</h4>
+                <div class="welcome-competence-grid">
+                  <div>
+                    <strong>a. Komponen Utama Konversi Energi:</strong> Mengidentifikasi blok silinder, kepala silinder, piston &amp; ring piston, batang piston, crankshaft, dan roda gila (flywheel).
+                  </div>
+                  <div>
+                    <strong>b. Komponen Tambahan Mesin:</strong> Memahami fungsi poros nok (camshaft), mekanisme katup (valve mechanism), gasket kepala silinder, panci oli (oil pan), dan timing belt/chain.
+                  </div>
+                  <div>
+                    <strong>c. Komponen Perlengkapan Mesin:</strong> Mengetahui fungsi intake &amp; exhaust manifold, alternator listrik, motor starter, water pump, serta filter udara/oli.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kartu 2: Alat Bengkel & Pengukuran (Materi Tambahan) -->
+            <div class="welcome-step-card" style="width: 100%; box-sizing: border-box;">
+              <div class="welcome-step-badge teal" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);">⚙️</div>
+              <div class="welcome-step-info" style="width: 100%;">
+                <h4 style="color: #0d9488;">Alat &amp; Pengukuran (Materi Tambahan)</h4>
+                <div class="welcome-competence-grid">
+                  <div>
+                    <strong>a. Alat &amp; Kunci Bengkel (Hand Tools):</strong> Mengenal klasifikasi, fungsi, dan penggunaan peralatan tangan (kunci pas, ring, soket, obeng) serta Special Service Tools (SST) otomotif.
+                  </div>
+                  <div>
+                    <strong>b. Simulasi Alat Ukur Presisi:</strong> Melatih keterampilan penggunaan, kalibrasi, dan pembacaan hasil jangka sorong (vernier caliper), mikrometer luar, dan multimeter listrik.
+                  </div>
+                  <div>
+                    <strong>c. Prosedur Keselamatan Kerja &amp; APD:</strong> Memahami kepatuhan penggunaan Alat Pelindung Diri (wearpack, sepatu safety) dan budaya kerja industri 5S/5R.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Kartu 3: Tujuan Pembelajaran -->
+            <div class="welcome-step-card" style="width: 100%; box-sizing: border-box;">
+              <div class="welcome-step-badge orange" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">🎯</div>
+              <div class="welcome-step-info" style="width: 100%;">
+                <h4 style="color: var(--clr-primary);">Tujuan Pembelajaran</h4>
+                <div class="welcome-competence-grid">
+                  <div>
+                    <strong>🎯 Kompetensi Komponen:</strong> Siswa mampu mengidentifikasi nama, letak, dan fungsi komponen utama serta tambahan mesin otomotif secara mandiri.
+                  </div>
+                  <div>
+                    <strong>🛠️ Keterampilan Alat Bengkel:</strong> Siswa terampil memilih dan mengoperasikan kunci-kunci bengkel &amp; SST sesuai prosedur operasional standar (SOP).
+                  </div>
+                  <div>
+                    <strong>📏 Presisi Pengukuran:</strong> Siswa terampil melakukan kalibrasi, pengukuran, dan membaca hasil jangka sorong, mikrometer, dan multimeter secara tepat.
+                  </div>
+                  <div>
+                    <strong>🧠 Analisis &amp; Logika:</strong> Siswa mampu menganalisis siklus kerja motor bakar, sistem rem hidrolik, dan kelistrikan bodi dasar.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panduan "Ayo Kita Mulai!" Section -->
+        <div class="welcome-steps-section">
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--clr-primary); padding-bottom: 8px; margin-bottom: var(--sp-md); flex-wrap: wrap; gap: 8px;">
+            <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 8px;">
+              <span>🚦</span> Panduan Belajar: Ayo Kita Mulai!
+            </h3>
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--clr-primary); background: rgba(249, 115, 22, 0.08); padding: 4px 12px; border-radius: var(--radius-full); text-transform: uppercase; letter-spacing: 0.5px;">PROSEDUR AKADEMIK TKR</span>
+          </div>
+          
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--sp-lg); line-height: 1.6;">
+            Ikuti petunjuk langkah terstruktur di bawah ini untuk memulai petualangan belajar Anda:
+          </p>
+
+          <div class="welcome-steps-grid">
+            <!-- Langkah 1 -->
+            <div class="welcome-step-card">
+              <div class="welcome-step-badge orange">1</div>
+              <div class="welcome-step-info">
+                <h4>Isi Nama Profil Siswa</h4>
+                <p>Klik tombol mulai untuk mengisi <strong>Nama Lengkap</strong> dan memilih <strong>Avatar Mekanik</strong> Anda secara instan tanpa perlu mendaftar akun.</p>
+              </div>
+            </div>
+
+            <!-- Langkah 2 -->
+            <div class="welcome-step-card">
+              <div class="welcome-step-badge teal">2</div>
+              <div class="welcome-step-info">
+                <h4>Pilih Sistem Kendaraan</h4>
+                <p>Masuk ke peta bengkel virtual. Pilih modul belajar otomotif TKR yang ingin Anda selesaikan, dimulai dari <strong>Sistem Rem</strong>, dilanjutkan ke <strong>Mesin Kendaraan</strong>, dst.</p>
+              </div>
+            </div>
+
+            <!-- Langkah 3 -->
+            <div class="welcome-step-card">
+              <div class="welcome-step-badge green">3</div>
+              <div class="welcome-step-info">
+                <h4>Pahami Teori &amp; Simulasi Flash</h4>
+                <p>Bacalah slide penjelasan multimedia dan putar file media <strong>177 Animasi Flash (Ruffle)</strong> untuk memvisualisasikan sirkulasi fluida, gaya hidrolik, dan siklus 4-tak.</p>
+              </div>
+            </div>
+
+            <!-- Langkah 4 -->
+            <div class="welcome-step-card">
+              <div class="welcome-step-badge orange">4</div>
+              <div class="welcome-step-info">
+                <h4>Lakukan Perakitan Virtual</h4>
+                <p>Tarik suku cadang (seperti kampas, cakram, kaliper, piston) dari kotak peralatan (toolbox) dan letakkan tepat pada target neon blueprint kendaraan.</p>
+              </div>
+            </div>
+
+            <!-- Langkah 5 -->
+            <div class="welcome-step-card">
+              <div class="welcome-step-badge teal">5</div>
+              <div class="welcome-step-info">
+                <h4>Hadapi Evaluasi Kuis</h4>
+                <p>Selesaikan 10 pertanyaan kuis pilihan ganda secara jujur. Sistem <strong>Kiosk Mode (Anti-Contek)</strong> akan memantau aktivitas Anda demi keabsahan nilai.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Action Box -->
+        <div class="welcome-action-box" style="margin-top: var(--sp-2xl); margin-bottom: var(--sp-xl); display: flex; flex-direction: column; align-items: center; gap: 15px;">
+          <!-- Tombol untuk Localhost (Normal Play) -->
+          <button id="btn-start" class="btn btn-primary btn-lg welcome-cta-btn" style="padding: 16px 52px; font-size: 1.25rem; font-weight: 850; border-radius: 50px; letter-spacing: 0.5px; border: none; cursor: pointer; transition: all var(--transition-spring);" type="button">
+            Ayo Main Sekarang! 🎮
+          </button>
+
+          <button id="btn-landing-teacher" class="btn btn-secondary" style="padding: 10px 32px; font-size: 0.95rem; font-weight: 700; border-radius: 50px; border: 1px solid rgba(0, 245, 255, 0.3); background: rgba(10, 15, 30, 0.6); color: var(--clr-accent); cursor: pointer; transition: all var(--transition-spring);" type="button">
+            🧑‍🏫 Portal &amp; Laporan Guru
+          </button>
+
+          <!-- Tombol untuk File Protocol (CORS Blocked) -->
+          <div id="file-protocol-launcher" style="display: none; max-width: 650px; width: 100%; background: rgba(30, 41, 59, 0.45); border: 2px solid var(--clr-primary); border-radius: 20px; padding: 25px; box-sizing: border-box; text-align: center; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🚀</div>
+            <h3 style="color: var(--clr-primary); margin: 0 0 10px 0; font-weight: 800; font-size: 1.25rem;">Jalankan Game via Local Server</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin: 0 0 20px 0;">
+              Browser memblokir pemutaran animasi Flash jika dibuka langsung dari file HTML. Silakan klik tombol di bawah untuk menjalankan server lokal game otomatis.
+            </p>
+            <button id="btn-download-bat" class="btn btn-primary btn-lg" style="padding: 14px 40px; font-size: 1.1rem; font-weight: 850; border-radius: 50px; letter-spacing: 0.5px; border: none; cursor: pointer; background: linear-gradient(135deg, #ff6b35 0%, #f97316 100%); color: white; display: inline-flex; align-items: center; gap: 8px; transition: all var(--transition-spring);" type="button">
+              📥 Jalankan Game (JALANKAN_GAME.bat)
+            </button>
+            <div id="bat-instructions" style="display: none; margin-top: 20px; text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border-left: 4px solid var(--clr-secondary); font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary);">
+              <strong style="color: white; display: block; margin-bottom: 8px;">👉 Langkah Terakhir:</strong>
+              1. Klik file <strong style="color: var(--clr-primary);">JALANKAN_GAME.bat</strong> yang baru saja terunduh di browser Anda.<br>
+              2. Jendela Command Prompt akan muncul dan otomatis mengaktifkan server.<br>
+              3. Halaman game baru akan otomatis terbuka di <strong style="color: var(--clr-secondary);">http://localhost:8000</strong> dengan semua animasi Flash aktif!
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 2 — MAIN MENU
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-menu" class="screen">
+      <!-- Decorative background elements -->
+      <div class="menu-decor-shape-1"></div>
+      <div class="menu-decor-shape-2"></div>
+
+      <!-- Player info bar -->
+      <div id="player-info">
+        <div class="player-avatar" aria-hidden="true">🧑‍🔧</div>
+        <div class="player-details">
+          <div class="player-name" id="display-player-name">Mekanik</div>
+          <div class="player-level-title" id="display-level-title">Pemula — Level 1</div>
+        </div>
+        <div class="xp-bar-container">
+          <div class="xp-bar-label">
+            <span>XP</span>
+            <span id="display-xp">0 / 500</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+        <button id="btn-logout-game" class="btn btn-danger btn-sm" style="margin-left: auto; white-space: nowrap; font-weight: bold; border-radius: 8px;" type="button">
+          Keluar 🚪
+        </button>
+      </div>
+
+      <!-- Peringkat Kelas Banner -->
+      <div id="ranking-banner" class="ranking-banner-container" style="display: none;"></div>
+
+      <!-- Menu Grid -->
+      <div class="menu-grid">
+        <!-- Card 1: Peta Bengkel -->
+        <div class="menu-card" id="btn-goto-map" role="button" tabindex="0" aria-label="Peta Bengkel — Mulai permainan utama">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-map">
+               <path d="M 10 10 L 50 10 L 50 50 L 10 50 Z" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="2, 2" opacity="0.3" />
+               <path d="M 15 30 L 45 30 M 30 15 L 30 45" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.5" />
+               <path d="M 15 20 Q 30 40 45 20" fill="none" stroke="var(--clr-secondary)" stroke-width="3" stroke-linecap="round" />
+               <g class="anim-bounce-pin">
+                 <path d="M 30 20 C 27 20 25 22 25 25 C 25 29 30 35 30 35 C 30 35 35 29 35 25 C 35 22 33 20 30 20 Z" fill="#ff4b1f" stroke="#ffffff" stroke-width="1.5" />
+                 <circle cx="30" cy="25" r="2.5" fill="#ffffff" />
+               </g>
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Main Sekarang</h3>
+          <p class="menu-card-desc">Jelajahi level dan kuasai setiap sistem kendaraan</p>
+        </div>
+
+        <!-- Card 2: Perpustakaan -->
+        <div class="menu-card" id="btn-goto-library" role="button" tabindex="0" aria-label="Perpustakaan — Buka materi referensi">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-library">
+              <path d="M 10 48 L 50 48" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.7" />
+              <rect x="16" y="18" width="8" height="30" rx="1.5" fill="none" stroke="#ffffff" stroke-width="2.5" />
+              <line x1="20" y1="24" x2="20" y2="42" stroke="#ffffff" stroke-width="1.5" />
+              <g transform="translate(28, 20) rotate(15)">
+                <rect x="0" y="0" width="8" height="28" rx="1.5" fill="none" stroke="var(--clr-secondary-light)" stroke-width="2.5" />
+                <line x1="4" y1="6" x2="4" y2="22" stroke="var(--clr-secondary-light)" stroke-width="1.5" />
+              </g>
+              <g transform="translate(38, 32)">
+                <rect x="0" y="0" width="14" height="6" rx="1" fill="none" stroke="#ffffff" stroke-width="2" />
+                <rect x="-2" y="6" width="18" height="6" rx="1" fill="none" stroke="#ffffff" stroke-width="2" />
+              </g>
+              <circle cx="30" cy="12" r="2" fill="#ffffff" class="anim-sparkle" style="animation: check-pulse 2s infinite;" />
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Perpustakaan</h3>
+          <p class="menu-card-desc">Materi referensi dan panduan belajar lengkap</p>
+        </div>
+
+        <!-- Card 3: Papan Skor -->
+        <div class="menu-card" id="btn-goto-scores" role="button" tabindex="0" aria-label="Papan Skor — Lihat pencapaian dan skor">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-scores">
+              <path d="M 18 48 L 42 48 M 30 40 L 30 48" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+              <path d="M 20 18 L 40 18 L 40 32 C 40 37 36 40 30 40 C 24 40 20 37 20 32 Z" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+              <path d="M 20 22 C 16 22 16 28 20 28 M 40 22 C 44 22 44 28 40 28" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" />
+              <g class="anim-trophy-star" transform="translate(30, 10)">
+                <path d="M 0 -7 L 2.2 -2.2 L 7 -2.2 L 3.2 0.8 L 4.6 5.6 L 0 2.6 L -4.6 5.6 L -3.2 0.8 L -7 -2.2 L -2.2 -2.2 Z" fill="#ffc300" stroke="#ffffff" stroke-width="0.8" />
+              </g>
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Papan Skor</h3>
+          <p class="menu-card-desc">Pencapaian, badge, dan statistik belajarmu</p>
+        </div>
+
+        <!-- Card 4: Pengaturan -->
+        <div class="menu-card" id="btn-goto-settings" role="button" tabindex="0" aria-label="Pengaturan — Ubah pengaturan aplikasi">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-settings">
+              <g transform="translate(22, 36) scale(0.9)" class="anim-gear-cw" style="transform-origin: 0px 0px;">
+                <circle cx="0" cy="0" r="12" fill="none" stroke="#ffffff" stroke-width="2.5" />
+                <circle cx="0" cy="0" r="4" fill="none" stroke="#ffffff" stroke-width="2.5" />
+                <path d="M 0 -12 L 0 -16 M 0 12 L 0 16 M -12 0 L -16 0 M 12 0 L 16 0 M 8.5 -8.5 L 11.5 -11.5 M -8.5 8.5 L -11.5 11.5 M -8.5 -8.5 L -11.5 -11.5 M 8.5 8.5 L 11.5 11.5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+              </g>
+              <g transform="translate(38, 22) scale(0.7)" class="anim-gear-ccw" style="transform-origin: 0px 0px;">
+                <circle cx="0" cy="0" r="12" fill="none" stroke="var(--clr-secondary)" stroke-width="2.5" />
+                <circle cx="0" cy="0" r="4" fill="none" stroke="var(--clr-secondary)" stroke-width="2.5" />
+                <path d="M 0 -12 L 0 -16 M 0 12 L 0 16 M -12 0 L -16 0 M 12 0 L 16 0 M 8.5 -8.5 L 11.5 -11.5 M -8.5 8.5 L -11.5 11.5 M -8.5 -8.5 L -11.5 -11.5 M 8.5 8.5 L 11.5 11.5" stroke="var(--clr-secondary)" stroke-width="2.5" stroke-linecap="round" />
+              </g>
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Pengaturan</h3>
+          <p class="menu-card-desc">Atur profil, suara, dan lainnya</p>
+        </div>
+
+        <!-- Card 5: Alat & Kunci Bengkel -->
+        <div class="menu-card" id="btn-goto-tools-direct" role="button" tabindex="0" aria-label="Alat & Kunci Bengkel — Pengenalan hand tools dan special service tools">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-tools">
+              <path d="M 15 45 L 45 15 M 40 10 L 50 20 M 42 12 L 48 18" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+              <path d="M 12 48 C 10 46 10 42 14 38 C 16 36 20 36 22 38 L 18 42 L 22 46 C 20 48 16 48 12 48 Z" fill="#ffffff" stroke="#ffffff" stroke-width="1.5" />
+              <path d="M 12 48 C 10 46 8 38 14 32 L 20 38 C 14 44 12 48 12 48 Z" fill="none" stroke="#ffffff" stroke-width="2" />
+              <circle cx="30" cy="30" r="4" fill="none" stroke="var(--clr-secondary)" stroke-width="2.5" />
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Alat &amp; Kunci Bengkel</h3>
+          <p class="menu-card-desc">Pelajari nama, fungsi, &amp; penggunaan kunci pas, ring, &amp; SST</p>
+        </div>
+
+        <!-- Card 6: Budaya K3 & APD -->
+        <div class="menu-card" id="btn-goto-k3-direct" role="button" tabindex="0" aria-label="Budaya K3 & APD — Panduan keselamatan kerja">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-k3">
+              <path d="M 30 10 C 38 10 45 13 45 13 C 45 13 45 32 30 46 C 15 32 15 13 15 13 C 15 13 22 10 30 10 Z" fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+              <path d="M 23 28 L 28 33 L 37 22" fill="none" stroke="var(--clr-secondary)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Budaya K3 &amp; APD</h3>
+          <p class="menu-card-desc">Budaya kerja 5R, keselamatan kerja, &amp; APD lengkap</p>
+        </div>
+
+        <!-- Card 7: Simulasi Alat Ukur -->
+        <div class="menu-card" id="btn-goto-measuring-direct" role="button" tabindex="0" aria-label="Simulasi Alat Ukur — Latihan membaca jangka sorong dan mikrometer">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-measuring">
+              <path d="M 15 15 L 45 15 M 15 15 L 15 30 L 22 30 L 22 20 M 45 15 L 45 35 L 38 35 L 38 20" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+              <line x1="20" y1="15" x2="20" y2="18" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="25" y1="15" x2="25" y2="20" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="30" y1="15" x2="30" y2="18" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="35" y1="15" x2="35" y2="20" stroke="#ffffff" stroke-width="1.5" />
+              <line x1="40" y1="15" x2="40" y2="18" stroke="#ffffff" stroke-width="1.5" />
+              <circle cx="30" cy="38" r="10" fill="none" stroke="var(--clr-secondary)" stroke-width="2.5" />
+              <line x1="30" y1="38" x2="35" y2="33" stroke="var(--clr-secondary)" stroke-width="2" stroke-linecap="round" />
+              <circle cx="30" cy="38" r="1.5" fill="#ffffff" />
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Simulasi Alat Ukur</h3>
+          <p class="menu-card-desc">Latihan membaca jangka sorong, mikrometer &amp; multimeter</p>
+        </div>
+
+        <!-- Card 8: Urutan Prestasi -->
+        <div class="menu-card" id="btn-goto-rankings" role="button" tabindex="0" aria-label="Urutan Prestasi — Lihat peringkat siswa secara real-time">
+          <div class="menu-card-icon">
+            <svg width="60" height="60" viewBox="0 0 60 60" class="svg-dashboard-teacher">
+              <rect x="12" y="14" width="36" height="24" rx="4" fill="none" stroke="#ffffff" stroke-width="3" />
+              <line x1="20" y1="38" x2="15" y2="48" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+              <line x1="40" y1="38" x2="45" y2="48" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+              <path d="M 18 30 L 26 22 L 32 26 L 42 18" fill="none" stroke="var(--clr-secondary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="42" cy="18" r="2" fill="#ffffff" />
+            </svg>
+          </div>
+          <h3 class="menu-card-title">Urutan Prestasi</h3>
+          <p class="menu-card-desc">Grafik peringkat prestasi belajar siswa secara real-time</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 2.1 — VIRTUAL WORKSHOP 2.5D (VR MODE)
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-vr" class="screen">
+      <!-- Floating back button -->
+      <button class="vr-back-btn" id="btn-back-from-vr" type="button">
+        ← Kembali ke Menu
+      </button>
+
+      <!-- Center Title Banner -->
+      <div class="vr-title-banner">
+        ⚙️ Eksplorasi Bengkel Virtual TKR
+      </div>
+
+      <!-- Hotspots container -->
+      <div id="vr-hotspots-container"></div>
+
+      <!-- Navigation instruction hint -->
+      <div class="vr-instruction-hint">
+        💡 <strong>Eksplorasi Bebas:</strong> Arahkan kursor ke stasiun kerja (rem, mesin, kelistrikan, perkakas) dan klik untuk memulai materi &amp; simulasi perakitan!
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 1.2 — MODE SELECTION MODAL
+         ───────────────────────────────────────────────────── -->
+    <div id="modal-mode-select" role="dialog" aria-modal="true" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.85); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
+      <div class="modal-card" style="max-width: 500px; width: 90%; text-align: center; background: rgba(30, 41, 59, 0.75); border: 2px solid var(--clr-primary); border-radius: 24px; padding: 35px; box-shadow: 0 15px 40px rgba(0,0,0,0.5);">
+        <div style="font-size: 3rem; margin-bottom: var(--sp-sm);">🎮</div>
+        <h2 style="font-weight: 900; color: #ffffff; margin-bottom: var(--sp-xs);">Pilih Mode Bermain</h2>
+        <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: var(--sp-lg);">Silakan pilih metode navigasi pembelajaran otomotif Anda.</p>
+        
+        <div style="display: flex; flex-direction: column; gap: var(--sp-md);">
+          <!-- Mode 1: Peta Petualangan -->
+          <button id="btn-select-mode-map" class="btn btn-primary btn-lg" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800; padding: 14px 0; border-radius: 12px;" type="button">
+            🗺️ Mode Peta Petualangan
+          </button>
+          
+          <!-- Mode 2: Bengkel Virtual -->
+          <button id="btn-select-mode-vr" class="btn btn-secondary btn-lg" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 800; padding: 14px 0; border-radius: 12px; background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); color: white; border: none; cursor: pointer;" type="button">
+            🕶️ Mode Bengkel Virtual (VR 3.0)
+          </button>
+          
+          <button id="btn-close-mode-select" class="btn btn-secondary" style="width: 100%; margin-top: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--text-muted);" type="button">
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 3 — WORKSHOP MAP / LEVEL SELECT
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-map" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-map" type="button" aria-label="Kembali ke menu">←</button>
+        <h2>🗺️ Peta Bengkel</h2>
+      </div>
+
+      <!-- Level Map Grid -->
+      <div class="level-map level-grid">
+
+        <!-- Level 1: Sistem Rem -->
+        <div class="level-card available" data-level="1" role="button" tabindex="0">
+          <div class="level-icon">🔴</div>
+          <div class="level-info">
+            <div class="level-title">Sistem Rem</div>
+            <div class="level-progress-text">0% selesai</div>
+            <div class="level-progress-bar">
+              <div class="level-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+          </div>
+          <div class="level-meta">
+            <span class="level-lock" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <!-- Level 2: Mesin Kendaraan -->
+        <div class="level-card locked" data-level="2" role="button" tabindex="0">
+          <div class="level-icon">⚙️</div>
+          <div class="level-info">
+            <div class="level-title">Mesin Kendaraan</div>
+            <div class="level-progress-text">Terkunci</div>
+            <div class="level-progress-bar">
+              <div class="level-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+          </div>
+          <div class="level-meta">
+            <span class="level-lock" aria-hidden="true">🔒</span>
+          </div>
+        </div>
+
+        <!-- Level 3: Sistem Kelistrikan -->
+        <div class="level-card locked" data-level="3" role="button" tabindex="0">
+          <div class="level-icon">⚡</div>
+          <div class="level-info">
+            <div class="level-title">Sistem Kelistrikan</div>
+            <div class="level-progress-text">Terkunci</div>
+            <div class="level-progress-bar">
+              <div class="level-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+          </div>
+          <div class="level-meta">
+            <span class="level-lock" aria-hidden="true">🔒</span>
+          </div>
+        </div>
+
+        <!-- Level 4: Komponen Otomotif -->
+        <div class="level-card locked" data-level="4" role="button" tabindex="0">
+          <div class="level-icon">🔧</div>
+          <div class="level-info">
+            <div class="level-title">Komponen Otomotif</div>
+            <div class="level-progress-text">Terkunci</div>
+            <div class="level-progress-bar">
+              <div class="level-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+          </div>
+          <div class="level-meta">
+            <span class="level-lock" aria-hidden="true">🔒</span>
+          </div>
+        </div>
+
+        <!-- Level 5: Bahan Bakar & Pendingin -->
+        <div class="level-card locked" data-level="5" role="button" tabindex="0">
+          <div class="level-icon">⛽</div>
+          <div class="level-info">
+            <div class="level-title">Bahan Bakar &amp; Pendingin</div>
+            <div class="level-progress-text">Terkunci</div>
+            <div class="level-progress-bar">
+              <div class="level-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+          </div>
+          <div class="level-meta">
+            <span class="level-lock" aria-hidden="true">🔒</span>
+          </div>
+        </div>
+
+        <!-- Level 6: Ujian Akhir -->
+        <div class="level-card locked" data-level="6" role="button" tabindex="0">
+          <div class="level-icon">🏆</div>
+          <div class="level-info">
+            <div class="level-title">Ujian Akhir</div>
+            <div class="level-progress-text">Selesaikan semua level</div>
+            <div class="level-progress-bar">
+              <div class="level-progress-fill" style="width: 0%;"></div>
+            </div>
+            <div class="stars">
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+              <span class="star">⭐</span>
+            </div>
+          </div>
+          <div class="level-meta">
+            <span class="level-lock" aria-hidden="true">🔒</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 4 — LEVEL HUB
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-level" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-level" type="button" aria-label="Kembali ke peta">←</button>
+        <h2 id="level-hub-title">Sistem Rem</h2>
+      </div>
+
+      <div class="level-hub-content">
+        <!-- Level Info -->
+        <div class="level-hub-info">
+          <h3 class="level-detail-title" id="level-hub-heading">Modul 1: Sistem Rem</h3>
+          <p class="level-detail-desc level-description" id="level-hub-desc">Pelajari komponen, prinsip kerja, dan cara perawatan sistem rem kendaraan ringan secara mendalam.</p>
+          <p class="level-pemantik" id="level-hub-pemantik" style="font-style: italic; color: var(--clr-secondary); font-size: 0.92rem; margin-top: 12px; border-left: 3px solid var(--clr-secondary); padding-left: 10px; font-weight: 500; display: none; line-height: 1.5;"></p>
+          <div class="level-detail-stars"></div>
+          <div class="level-best-score"></div>
+        </div>
+
+        <!-- Objectives -->
+        <div class="level-hub-objectives level-objectives">
+          <h4>🎯 Tujuan Pembelajaran</h4>
+          <ul id="level-hub-objectives-list">
+            <li>Mengidentifikasi komponen sistem rem</li>
+            <li>Memahami prinsip kerja rem hidrolik</li>
+            <li>Melakukan perawatan dasar sistem rem</li>
+          </ul>
+        </div>
+
+        <!-- Phase Buttons -->
+        <div class="phase-buttons">
+          <!-- Phase 1: Belajar -->
+          <button id="btn-phase-learn" class="phase-btn" type="button">
+            <div class="phase-icon">📖</div>
+            <div class="phase-details">
+              <div class="phase-title">Belajar</div>
+              <div class="phase-desc">Materi teori dengan gambar &amp; penjelasan</div>
+            </div>
+            <span class="phase-status available">Tersedia</span>
+          </button>
+
+          <!-- Phase 2: Animasi Flash -->
+          <button id="btn-phase-animation" class="phase-btn" type="button">
+            <div class="phase-icon">🎬</div>
+            <div class="phase-details">
+              <div class="phase-title">Animasi Flash</div>
+              <div class="phase-desc">Eksplorasi animasi pembelajaran interaktif</div>
+            </div>
+            <span class="phase-status available">Tersedia</span>
+          </button>
+
+          <!-- Phase 3: Simulasi -->
+          <button id="btn-phase-simulate" class="phase-btn locked" type="button" disabled>
+            <div class="phase-icon">🔧</div>
+            <div class="phase-details">
+              <div class="phase-title">Simulasi</div>
+              <div class="phase-desc">Pasang komponen dengan drag &amp; drop</div>
+            </div>
+            <span class="phase-status locked">Terkunci</span>
+          </button>
+
+          <!-- Phase 4: Kuis -->
+          <button id="btn-phase-quiz" class="phase-btn locked" type="button" disabled>
+            <div class="phase-icon">❓</div>
+            <div class="phase-details">
+              <div class="phase-title">Kuis</div>
+              <div class="phase-desc">Uji pemahamanmu dengan pertanyaan</div>
+            </div>
+            <span class="phase-status locked">Terkunci</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 5 — LEARNING PHASE
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-learn" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-learn" type="button" aria-label="Kembali ke level hub">←</button>
+        <h2>📖 Materi Pembelajaran</h2>
+      </div>
+
+      <!-- Content Area -->
+      <div id="learn-content">
+        <!-- This section is populated by JavaScript -->
+        <div class="learn-section">
+          <h3>Memuat materi…</h3>
+          <p>Konten materi pembelajaran akan ditampilkan di sini.</p>
+        </div>
+
+        <!-- Animation / Interactive Visual -->
+        <div id="learn-animation">
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Area animasi interaktif</p>
+        </div>
+      </div>
+
+      <!-- Navigation Footer -->
+      <nav class="learn-nav" aria-label="Navigasi materi">
+        <button id="btn-learn-prev" class="btn btn-secondary btn-sm" type="button" disabled>
+          ← Sebelumnya
+        </button>
+        <span class="learn-progress-indicator" id="learn-progress">Langkah 1 dari 5</span>
+        <button id="btn-learn-next" class="btn btn-primary btn-sm" type="button">
+          Lanjut →
+        </button>
+      </nav>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 5B — ANIMATION GALLERY PHASE
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-animations" class="screen">
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-animations" type="button" aria-label="Kembali ke level hub">←</button>
+        <h2>🎬 Galeri Animasi Flash</h2>
+      </div>
+
+      <!-- Content Area -->
+      <div class="animations-layout">
+        <p class="animations-intro-text">Pilih dan putar animasi Flash interaktif Ruffle untuk memperdalam pemahaman materi pada level ini:</p>
+        <div id="animations-grid" class="animations-grid">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 6 — SIMULATION PHASE
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-simulate" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-simulate" type="button" aria-label="Kembali ke level hub">←</button>
+        <h2>🔧 Simulasi Bengkel</h2>
+      </div>
+
+      <div class="sim-layout">
+        <!-- Instruction -->
+        <div id="sim-instruction">
+          Seret komponen dari kotak alat ke posisi yang benar pada area kerja.
+        </div>
+
+        <!-- Toolbox -->
+        <div id="sim-toolbox">
+          <div class="toolbox-title">🧰 Kotak Alat</div>
+          <div class="toolbox-items">
+            <!-- Populated by JavaScript -->
+            <div class="draggable" draggable="true" data-component="brake-pad">
+              <span class="drag-icon">🔴</span>
+              <span>Kampas Rem</span>
+            </div>
+            <div class="draggable" draggable="true" data-component="brake-disc">
+              <span class="drag-icon">💿</span>
+              <span>Cakram Rem</span>
+            </div>
+            <div class="draggable" draggable="true" data-component="caliper">
+              <span class="drag-icon">🔩</span>
+              <span>Kaliper</span>
+            </div>
+            <div class="draggable" draggable="true" data-component="master-cylinder">
+              <span class="drag-icon">⚙️</span>
+              <span>Master Silinder</span>
+            </div>
+            <div class="draggable" draggable="true" data-component="brake-fluid">
+              <span class="drag-icon">💧</span>
+              <span>Minyak Rem</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workspace -->
+        <div id="sim-workspace">
+          <!-- Drop zones populated by JavaScript -->
+          <div class="drop-zone" data-target="brake-pad">
+            <span>🔴</span>
+            <span class="drop-label">Kampas Rem</span>
+          </div>
+          <div class="drop-zone" data-target="brake-disc">
+            <span>💿</span>
+            <span class="drop-label">Cakram Rem</span>
+          </div>
+          <div class="drop-zone" data-target="caliper">
+            <span>🔩</span>
+            <span class="drop-label">Kaliper</span>
+          </div>
+          <div class="drop-zone" data-target="master-cylinder">
+            <span>⚙️</span>
+            <span class="drop-label">Master Silinder</span>
+          </div>
+          <div class="drop-zone" data-target="brake-fluid">
+            <span>💧</span>
+            <span class="drop-label">Minyak Rem</span>
+          </div>
+        </div>
+
+        <!-- Feedback -->
+        <div id="sim-feedback"></div>
+
+        <!-- Footer -->
+        <div class="sim-footer">
+          <div id="sim-score">Skor: 0 / 5</div>
+          <button id="btn-sim-finish" class="btn btn-primary btn-sm" type="button">
+            ✅ Selesai
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 7 — QUIZ PHASE
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-quiz" class="screen">
+
+      <!-- Quiz Header -->
+      <div class="quiz-header">
+        <button class="btn-back" id="btn-back-from-quiz" type="button" aria-label="Kembali ke level hub">←</button>
+        <div id="quiz-timer">⏱️ <span>02:00</span></div>
+        <div id="quiz-counter">Soal 1 / 10</div>
+      </div>
+
+      <!-- Quiz Body -->
+      <div class="quiz-body">
+        <!-- Question Image (optional) -->
+        <div id="quiz-image">
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Gambar soal</p>
+        </div>
+
+        <!-- Question Text -->
+        <h3 id="quiz-question">
+          Apa fungsi utama master silinder pada sistem rem hidrolik?
+        </h3>
+
+        <!-- Answer Options -->
+        <div id="quiz-options">
+          <button class="quiz-option" type="button" data-option="A">
+            <span class="option-letter">A</span>
+            <span class="option-text">Mengubah tekanan kaki menjadi tekanan hidrolik</span>
+          </button>
+          <button class="quiz-option" type="button" data-option="B">
+            <span class="option-letter">B</span>
+            <span class="option-text">Menahan roda agar tidak berputar</span>
+          </button>
+          <button class="quiz-option" type="button" data-option="C">
+            <span class="option-letter">C</span>
+            <span class="option-text">Menyimpan minyak rem cadangan</span>
+          </button>
+          <button class="quiz-option" type="button" data-option="D">
+            <span class="option-letter">D</span>
+            <span class="option-text">Mendinginkan komponen rem</span>
+          </button>
+        </div>
+
+        <!-- Feedback -->
+        <div id="quiz-feedback">
+          <strong>Benar! ✅</strong> Master silinder berfungsi mengubah tekanan mekanis dari pedal rem menjadi tekanan hidrolik yang disalurkan ke kaliper rem.
+        </div>
+      </div>
+
+      <!-- Quiz Footer -->
+      <div class="quiz-footer">
+        <button id="btn-quiz-next" class="btn btn-primary" type="button">
+          Lanjut →
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 8 — RESULTS
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-results" class="screen">
+      <div class="results-content">
+        <!-- Stars Animation -->
+        <div class="result-stars-display">
+          <span class="result-star earned">⭐</span>
+          <span class="result-star earned">⭐</span>
+          <span class="result-star">⭐</span>
+        </div>
+
+        <h2 class="results-title">Bagus Sekali! 🎉</h2>
+        <p>Kamu sudah menyelesaikan modul ini dengan baik.</p>
+
+        <!-- Stats -->
+        <div class="result-stats">
+          <div class="result-stat">
+            <div class="result-stat-value" id="result-score">85</div>
+            <div class="result-stat-label">Skor</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-value" id="result-xp">+120</div>
+            <div class="result-stat-label">XP</div>
+          </div>
+          <div class="result-stat">
+            <div class="result-stat-value" id="result-stars">2/3</div>
+            <div class="result-stat-label">Bintang</div>
+          </div>
+        </div>
+
+        <!-- Breakdown -->
+        <div class="result-breakdown">
+          <div class="result-breakdown-row">
+            <span class="label">Jawaban Benar</span>
+            <span class="value" id="result-correct">8 / 10</span>
+          </div>
+          <div class="result-breakdown-row">
+            <span class="label">Waktu</span>
+            <span class="value" id="result-time">01:45</span>
+          </div>
+          <div class="result-breakdown-row">
+            <span class="label">Simulasi</span>
+            <span class="value" id="result-sim">5 / 5</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="result-actions">
+          <button id="btn-retry" class="btn btn-secondary" type="button">
+            🔁 Ulangi
+          </button>
+          <button id="btn-next-level" class="btn btn-primary" type="button">
+            ➡️ Lanjut
+          </button>
+          <button id="btn-back-to-map" class="btn btn-ghost" type="button">
+            🗺️ Kembali ke Peta
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 9 — LIBRARY
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-library" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-library" type="button" aria-label="Kembali ke menu">←</button>
+        <h2>📚 Perpustakaan</h2>
+      </div>
+
+      <!-- Search / Filter -->
+      <div class="library-search">
+        <input type="text" id="library-search-input" placeholder="🔍 Cari materi…" aria-label="Cari materi perpustakaan">
+        <button class="btn btn-secondary btn-sm" id="btn-library-search" type="button">Cari</button>
+      </div>
+
+      <!-- Library Grid -->
+      <div class="library-grid">
+        <div class="library-card" data-topic="brakes">
+          <div class="library-card-icon">🔴</div>
+          <h4 class="library-card-title">Sistem Rem</h4>
+          <p class="library-card-desc">Rem cakram, rem tromol, komponen hidrolik, dan perawatan sistem rem.</p>
+        </div>
+        <div class="library-card" data-topic="engine">
+          <div class="library-card-icon">⚙️</div>
+          <h4 class="library-card-title">Mesin Kendaraan</h4>
+          <p class="library-card-desc">Siklus kerja mesin 4-tak, komponen utama, dan sistem pelumasan.</p>
+        </div>
+        <div class="library-card" data-topic="electrical">
+          <div class="library-card-icon">⚡</div>
+          <h4 class="library-card-title">Sistem Kelistrikan</h4>
+          <p class="library-card-desc">Rangkaian kelistrikan, komponen starter, pengisian, dan penerangan.</p>
+        </div>
+        <div class="library-card" data-topic="components">
+          <div class="library-card-icon">🔧</div>
+          <h4 class="library-card-title">Komponen Otomotif</h4>
+          <p class="library-card-desc">Komponen utama konversi energi, komponen tambahan, dan perlengkapan mesin.</p>
+        </div>
+        <div class="library-card" data-topic="fuel-cooling">
+          <div class="library-card-icon">⛽</div>
+          <h4 class="library-card-title">Bahan Bakar &amp; Pendingin</h4>
+          <p class="library-card-desc">Sistem injeksi bahan bakar, sistem pendingin, thermostat, dan radiator.</p>
+        </div>
+        <div class="library-card" data-topic="safety">
+          <div class="library-card-icon">🛡️</div>
+          <h4 class="library-card-title">K3 Bengkel</h4>
+          <p class="library-card-desc">Keselamatan dan kesehatan kerja di lingkungan bengkel otomotif.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 11 — URUTAN PRESTASI (STUDENT RANKING GRAPH)
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-rankings" class="screen">
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-rankings" type="button" aria-label="Kembali ke menu">←</button>
+        <h2>📊 Urutan Prestasi Siswa</h2>
+      </div>
+
+      <div class="rankings-container" style="padding: 20px; max-width: 800px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 20px; align-items: center;">
+        <p style="text-align: center; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+          Grafik peringkat prestasi belajar siswa secara real-time berdasarkan akumulasi XP dan pengerjaan modul.
+        </p>
+        
+        <div class="chart-wrapper">
+          <canvas id="chart-student-rankings"></canvas>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 10 — SCOREBOARD
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-scores" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-scores" type="button" aria-label="Kembali ke menu">←</button>
+        <h2>🏅 Papan Skor</h2>
+      </div>
+
+      <!-- Stats Summary -->
+      <div class="scores-summary">
+        <div class="score-stat-card" style="animation-delay: 0.1s;">
+          <div class="score-stat-value" id="total-xp">0</div>
+          <div class="score-stat-label">Total XP</div>
+        </div>
+        <div class="score-stat-card" style="animation-delay: 0.2s;">
+          <div class="score-stat-value" id="total-levels">0/6</div>
+          <div class="score-stat-label">Level Selesai</div>
+        </div>
+        <div class="score-stat-card" style="animation-delay: 0.3s;">
+          <div class="score-stat-value" id="total-stars">0/18</div>
+          <div class="score-stat-label">Bintang</div>
+        </div>
+        <div class="score-stat-card" style="animation-delay: 0.4s;">
+          <div class="score-stat-value" id="total-badges">0</div>
+          <div class="score-stat-label">Badge</div>
+        </div>
+      </div>
+
+      <!-- Achievements -->
+      <div class="achievements-section">
+        <h3>🏆 Pencapaian</h3>
+        <div class="achievements-grid">
+          <div class="badge-card" data-badge="first-step" style="animation-delay: 0.1s;">
+            <div class="badge-icon">🎯</div>
+            <div class="badge-name">Langkah Pertama</div>
+            <div class="badge-desc">Selesaikan level pertama</div>
+          </div>
+          <div class="badge-card locked" data-badge="speed-demon" style="animation-delay: 0.15s;">
+            <div class="badge-icon">⚡</div>
+            <div class="badge-name">Kilat</div>
+            <div class="badge-desc">Selesaikan kuis &lt; 1 menit</div>
+          </div>
+          <div class="badge-card locked" data-badge="perfect-score" style="animation-delay: 0.2s;">
+            <div class="badge-icon">💯</div>
+            <div class="badge-name">Skor Sempurna</div>
+            <div class="badge-desc">Raih skor 100 di kuis</div>
+          </div>
+          <div class="badge-card locked" data-badge="mechanic-pro" style="animation-delay: 0.25s;">
+            <div class="badge-icon">🔧</div>
+            <div class="badge-name">Mekanik Pro</div>
+            <div class="badge-desc">Selesaikan semua simulasi</div>
+          </div>
+          <div class="badge-card locked" data-badge="bookworm" style="animation-delay: 0.3s;">
+            <div class="badge-icon">📖</div>
+            <div class="badge-name">Kutu Buku</div>
+            <div class="badge-desc">Baca semua materi</div>
+          </div>
+          <div class="badge-card locked" data-badge="star-collector" style="animation-delay: 0.35s;">
+            <div class="badge-icon">⭐</div>
+            <div class="badge-name">Kolektor Bintang</div>
+            <div class="badge-desc">Kumpulkan 15 bintang</div>
+          </div>
+          <div class="badge-card locked" data-badge="all-star" style="animation-delay: 0.4s;">
+            <div class="badge-icon">🌟</div>
+            <div class="badge-name">Bintang Penuh</div>
+            <div class="badge-desc">Raih 3 bintang di semua level</div>
+          </div>
+          <div class="badge-card locked" data-badge="graduate" style="animation-delay: 0.45s;">
+            <div class="badge-icon">🎓</div>
+            <div class="badge-name">Lulus Ujian</div>
+            <div class="badge-desc">Selesaikan ujian akhir</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="leaderboard-panel" style="animation-delay: 0.5s;">
+        <div class="leaderboard-title-row">
+          <h3>📊 Papan Peringkat Kelas</h3>
+          <button id="btn-refresh-leaderboard" class="btn btn-sm" type="button">🔄 Refresh</button>
+        </div>
+        <div class="leaderboard-table-container">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th class="leaderboard-rank">Pos</th>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Skor</th>
+                <th>XP</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+              <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                  Hubungkan database di pengaturan untuk melihat peringkat.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 11 — SETTINGS
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-settings" class="screen">
+
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-settings" type="button" aria-label="Kembali ke menu">←</button>
+        <h2>⚙️ Pengaturan</h2>
+      </div>
+
+      <div class="settings-content">
+        <!-- Profile -->
+        <div class="setting-group" style="animation-delay: 0.1s;">
+          <div class="setting-group-title">Profil</div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Nama Pemain</div>
+              <div class="setting-desc">Nama yang ditampilkan di permainan</div>
+            </div>
+            <input type="text" id="input-player-name" class="input-text" placeholder="Nama kamu" value="" aria-label="Nama pemain">
+          </div>
+        </div>
+
+        <!-- Audio -->
+        <div class="setting-group" style="animation-delay: 0.2s;">
+          <div class="setting-group-title">Audio & Suara</div>
+          
+          <div class="setting-row" style="margin-bottom: 8px;">
+            <div>
+              <div class="setting-label">Musik Latar (BGM) 🎵</div>
+              <div class="setting-desc">Putar musik latar penyegar otak</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-music">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row" style="margin-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
+            <div style="flex-grow: 1;">
+              <div class="setting-label" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px;">Volume Musik</div>
+              <input type="range" id="volume-music" min="0" max="1" step="0.05" value="0.3" style="width: 100%; height: 6px; border-radius: 3px; accent-color: var(--clr-primary); background: rgba(255,255,255,0.1); outline: none;" aria-label="Volume Musik">
+            </div>
+          </div>
+
+          <div class="setting-row" style="margin-bottom: 8px;">
+            <div>
+              <div class="setting-label">Efek Suara (SFX) 🔊</div>
+              <div class="setting-desc">Bunyi interaksi klik dan kuis</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-sound" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-row">
+            <div style="flex-grow: 1;">
+              <div class="setting-label" style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 6px;">Volume Efek Suara</div>
+              <input type="range" id="volume-sound" min="0" max="1" step="0.05" value="0.5" style="width: 100%; height: 6px; border-radius: 3px; accent-color: var(--clr-secondary); background: rgba(255,255,255,0.1); outline: none;" aria-label="Volume Efek Suara">
+            </div>
+          </div>
+        </div>
+
+        <!-- Data -->
+        <div class="setting-group" style="animation-delay: 0.3s;">
+          <div class="setting-group-title">Data</div>
+          <div class="setting-row">
+            <div>
+              <div class="setting-label">Reset Progress</div>
+              <div class="setting-desc">Hapus semua data dan mulai dari awal</div>
+            </div>
+            <button id="btn-reset-progress" class="btn btn-sm" style="background: rgba(239,68,68,0.15); color: var(--clr-error-light); border: 1px solid rgba(239,68,68,0.3);" type="button">
+              🗑️ Reset
+            </button>
+          </div>
+        </div>
+
+
+        <!-- About -->
+        <div class="setting-group about-section" style="animation-delay: 0.4s;">
+          <div class="about-logo">🔧</div>
+          <h3>AutoMaster</h3>
+          <p>
+            Bengkel Virtual — Game edukasi interaktif untuk siswa SMK bidang Teknik Kendaraan Ringan.
+          </p>
+          <p>
+            Dikembangkan oleh <strong style="color: var(--clr-primary);">Imam Saputra, S.T.</strong><br>
+            SMK Amal Bakti Jatimulyo
+          </p>
+          <p class="version">Versi 1.0.0 — Sayembara Bahan Ajar Digital SMK 2026</p>
+          <div class="copyright-info" style="font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 12px; padding-top: 10px; color: var(--text-muted); text-align: left; line-height: 1.4;">
+            <strong>ℹ️ Hak Cipta & Lisensi Aset Digital:</strong>
+            <ul style="padding-left: 14px; margin: 4px 0 0 0; list-style-type: disc;">
+              <li><strong>Desain Antarmuka:</strong> Hak cipta pribadi pengembang sepenuhnya.</li>
+              <li><strong>Animasi Pembelajaran:</strong> Bersumber dari media pembelajaran interaktif resmi kementerian (Kemendikbud) dengan izin penggunaan.</li>
+              <li><strong>Aset Grafis & Ilustrasi:</strong> Kombinasi aset royalty-free dan beberapa ilustrasi dibantu oleh AI untuk kebutuhan edukasi non-komersial.</li>
+              <li><strong>Lisensi Konten:</strong> Konten berlisensi <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" style="color: var(--clr-primary); text-decoration: underline;">CC BY-SA 4.0</a>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 11B — TEACHER DASHBOARD
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-teacher" class="screen">
+      <!-- Header -->
+      <div class="screen-header">
+        <button class="btn-back" id="btn-back-from-teacher" type="button" aria-label="Kembali ke login">←</button>
+        <h2>🧑‍🏫 Dasbor Pemantauan Guru</h2>
+        <button id="btn-teacher-logout" class="btn btn-sm" style="background: rgba(239,68,68,0.15); color: var(--clr-error-light); border: 1px solid rgba(239,68,68,0.3); font-weight: 600; padding: 6px 12px;" type="button">
+          Logout 🚪
+        </button>
+      </div>
+
+      <div class="teacher-dashboard-content" style="padding: var(--sp-lg); max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box;">
+        
+        <!-- API URL Config & Class Filter Section -->
+        <div class="teacher-top-panel" style="display: flex; gap: var(--sp-md); flex-wrap: wrap; margin-bottom: var(--sp-lg); background: var(--card-bg, rgba(20,27,45,0.7)); padding: var(--sp-md); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+          <!-- DB Config (only for teachers, secure!) -->
+          <div class="db-config-box" style="flex: 2; min-width: 300px; display: flex; flex-direction: column; gap: 6px;">
+            <label for="teacher-db-url" style="font-size: 0.82rem; font-weight: 600; color: var(--clr-secondary);">Konfigurasi Google Apps Script URL API (Guru)</label>
+            <div style="display: flex; gap: 8px;">
+              <input type="text" id="teacher-db-url" class="input-text" style="flex: 1; font-size: 0.85rem; padding: 8px 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;" placeholder="Masukkan URL API Google Sheets Apps Script">
+              <button id="btn-save-db-url" class="btn btn-primary btn-sm" style="padding: 0 16px; font-size: 0.85rem; font-weight: 600;" type="button">Simpan 💾</button>
+            </div>
+          </div>
+          <!-- Class Selector -->
+          <div class="class-filter-box" style="flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 6px;">
+            <label for="teacher-class-filter" style="font-size: 0.82rem; font-weight: 600; color: var(--clr-primary);">Filter Kelas Siswa</label>
+            <select id="teacher-class-filter" class="select-field" style="width: 100%; font-size: 0.85rem; padding: 8px 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px; height: 38px;">
+              <option value="">Semua Kelas</option>
+            </select>
+          </div>
+          <!-- Student Search -->
+          <div class="search-box" style="flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 6px;">
+            <label for="teacher-student-search" style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">Cari Siswa</label>
+            <input type="text" id="teacher-student-search" class="input-text" style="width: 100%; font-size: 0.85rem; padding: 8px 12px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;" placeholder="Nama / NIS...">
+          </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="teacher-metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--sp-md); margin-bottom: var(--sp-lg);">
+          <div class="metric-card" style="background: linear-gradient(135deg, rgba(25,35,60,0.8) 0%, rgba(15,22,40,0.8) 100%); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; min-height: 100px;">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Total Siswa</span>
+            <span id="teacher-metric-total-students" style="font-size: 1.8rem; font-weight: 800; color: var(--clr-primary); margin-top: 4px;">0</span>
+          </div>
+          <div class="metric-card" style="background: linear-gradient(135deg, rgba(25,35,60,0.8) 0%, rgba(15,22,40,0.8) 100%); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; min-height: 100px;">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Rata-rata Skor</span>
+            <span id="teacher-metric-avg-score" style="font-size: 1.8rem; font-weight: 800; color: var(--clr-secondary); margin-top: 4px;">0</span>
+          </div>
+          <div class="metric-card" style="background: linear-gradient(135deg, rgba(25,35,60,0.8) 0%, rgba(15,22,40,0.8) 100%); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; min-height: 100px;">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Rata-rata XP</span>
+            <span id="teacher-metric-avg-xp" style="font-size: 1.8rem; font-weight: 800; color: #10b981; margin-top: 4px;">0</span>
+          </div>
+          <div class="metric-card" style="background: linear-gradient(135deg, rgba(25,35,60,0.8) 0%, rgba(15,22,40,0.8) 100%); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: center; min-height: 100px;">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Siswa Aktif (Hari Ini)</span>
+            <span id="teacher-metric-active-today" style="font-size: 1.8rem; font-weight: 800; color: #f59e0b; margin-top: 4px;">0</span>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="teacher-charts-row" style="display: flex; gap: var(--sp-lg); flex-wrap: wrap; margin-bottom: var(--sp-lg);">
+          <div class="chart-card" style="flex: 1; min-width: 320px; background: rgba(20,27,45,0.7); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1rem; margin-bottom: var(--sp-sm); color: var(--text-primary);">Grafik Ketuntasan Level (%)</h3>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="chart-level-completion"></canvas>
+            </div>
+          </div>
+          <div class="chart-card" style="flex: 1; min-width: 320px; background: rgba(20,27,45,0.7); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm);">
+            <h3 style="font-size: 1rem; margin-bottom: var(--sp-sm); color: var(--text-primary);">Distribusi XP Siswa</h3>
+            <div style="position: relative; height: 260px; width: 100%;">
+              <canvas id="chart-xp-distribution"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student List Table Card -->
+        <div class="table-card" style="background: rgba(20,27,45,0.7); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm); margin-bottom: var(--sp-lg);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-md); flex-wrap: wrap; gap: 8px;">
+            <h3 style="font-size: 1.1rem; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+              📋 Detail Progres Belajar Siswa
+            </h3>
+            <button id="btn-refresh-teacher-data" class="btn btn-secondary btn-sm" type="button">🔄 Muat Ulang Data</button>
+          </div>
+          
+          <div class="teacher-table-responsive" style="overflow-x: auto; max-height: 400px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+            <table class="teacher-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+              <thead>
+                <tr style="background: rgba(255,255,255,0.05); border-bottom: 2px solid rgba(255,255,255,0.1); color: var(--clr-primary); font-weight: 600;">
+                  <th style="padding: 12px 8px;">Nama</th>
+                  <th style="padding: 12px 8px;">NIS</th>
+                  <th style="padding: 12px 8px;">Kelas</th>
+                  <th style="padding: 12px 8px;">WhatsApp</th>
+                  <th style="padding: 12px 8px; text-align: center;">Skor</th>
+                  <th style="padding: 12px 8px; text-align: center;">⭐</th>
+                  <th style="padding: 12px 8px; text-align: center;">XP</th>
+                  <th style="padding: 12px 8px;">Predikat</th>
+                  <th style="padding: 12px 4px; text-align: center;">L1</th>
+                  <th style="padding: 12px 4px; text-align: center;">L2</th>
+                  <th style="padding: 12px 4px; text-align: center;">L3</th>
+                  <th style="padding: 12px 4px; text-align: center;">L4</th>
+                  <th style="padding: 12px 4px; text-align: center;">L5</th>
+                  <th style="padding: 12px 4px; text-align: center;">L6</th>
+                </tr>
+              </thead>
+              <tbody id="teacher-student-tbody">
+                <tr>
+                  <td colspan="14" style="text-align: center; padding: 30px; color: var(--text-muted);">Sedang mengambil data dari database...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- Apps Script Guide & Share Card -->
+        <div class="code-guide-card" style="margin-bottom: var(--sp-lg);">
+          <h3 style="font-size: 1.1rem; color: var(--clr-secondary); margin-bottom: var(--sp-sm); display: flex; align-items: center; gap: 8px;">
+            🛠️ Panduan & Salin Apps Script Database (Untuk Rekan Guru)
+          </h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+            Ingin menggunakan game ini untuk kelas Anda sendiri di sekolah? Anda bisa menduplikasi database spreadsheet secara mandiri dengan langkah mudah berikut:
+          </p>
+          <div class="code-guide-steps" style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+            <ol style="padding-left: 20px; margin: 8px 0;">
+              <li><strong>Buat Spreadsheet Baru:</strong> Buat sebuah spreadsheet kosong baru di Google Drive Anda.</li>
+              <li><strong>Buka Google Apps Script:</strong> Pada menu atas spreadsheet, klik <strong>Ekstensi</strong> &gt; <strong>Apps Script</strong>.</li>
+              <li><strong>Tempel Kode Backend:</strong> Hapus seluruh kode bawaan di editor Apps Script, salin kode Apps Script di bawah ini secara penuh dan tempelkan.</li>
+              <li><strong>Atur Password Guru Anda:</strong> Sesuaikan konfigurasi password dasbor Anda pada variabel <code>TEACHER_SECRET</code> di baris ke-30 (ganti sesuai keinginan Anda).</li>
+              <li><strong>Jalankan Fungsi Setup:</strong> Pilih fungsi <code>SETUP</code> pada menu dropdown bagian atas editor, kemudian klik tombol <strong>Run / Jalankan</strong>. Fungsi ini akan membuat lembar kerja <code>users</code>, <code>scores</code>, dan <code>sessions</code> secara otomatis di Spreadsheet Anda.</li>
+              <li><strong>Terapkan Aplikasi Web:</strong> Klik tombol <strong>Terapkan (Deploy)</strong> &gt; <strong>Terapkan Baru (New Deployment)</strong>. Pilih tipe <strong>Aplikasi Web (Web App)</strong>. Konfigurasikan:
+                <ul style="padding-left: 20px; margin: 4px 0; list-style-type: circle;">
+                  <li>Jalankan sebagai (Execute as): <strong>Saya / Me (akun Google Anda)</strong></li>
+                  <li>Siapa yang memiliki akses (Who has access): <strong>Siapa saja / Anyone</strong></li>
+                </ul>
+              </li>
+              <li><strong>Hubungkan ke Dasbor:</strong> Salin URL Aplikasi Web yang muncul setelah penerapan, masukkan pada kolom <strong>Konfigurasi Google Apps Script URL API</strong> di atas dasbor ini, lalu klik <strong>Simpan 💾</strong>.</li>
+            </ol>
+          </div>
+          <div class="code-textarea-container">
+            <textarea id="textarea-script-code" class="code-textarea" readonly placeholder="Sedang memuat berkas Apps Script Code.gs..."></textarea>
+          </div>
+          <div class="code-action-row" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+            <button id="btn-copy-script-code" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 6px;" type="button">
+              📋 Salin Kode Apps Script
+            </button>
+          </div>
+        </div>
+
+        <!-- Recent Logs Section -->
+        <div class="logs-card" style="background: rgba(20,27,45,0.7); border-radius: 12px; padding: var(--sp-md); border: 1px solid rgba(255,255,255,0.05); box-shadow: var(--shadow-sm);">
+          <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: var(--sp-md);">🚪 Log Sesi Login Terbaru (20 Terakhir)</h3>
+          <div style="max-height: 250px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 10px; background: rgba(0,0,0,0.15); font-family: monospace; font-size: 0.8rem; line-height: 1.5;">
+            <div id="teacher-session-logs" style="color: var(--text-secondary);">Sedang memuat log sesi...</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 11C — MEASURING TOOL SIMULATOR
+         ───────────────────────────────────────────────────── -->
+    <section id="screen-measuring" class="screen">
+      <!-- Header -->
+      <div class="screen-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: var(--sp-sm);">
+        <div style="display: flex; align-items: center; gap: var(--sp-md);">
+          <button class="btn-back" id="btn-back-from-measuring" type="button" aria-label="Kembali ke Beranda" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0 var(--sp-sm);">←</button>
+          <h2 style="font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 10px; font-size: 1.4rem; margin: 0;">
+            <span style="color: var(--clr-secondary);">📏</span> Simulasi Alat Ukur Otomotif
+          </h2>
+        </div>
+        <div style="font-size: 0.82rem; font-weight: 850; color: var(--clr-secondary); background: rgba(13, 148, 136, 0.1); padding: 4px 12px; border-radius: 50px; border: 1.5px solid var(--clr-secondary);">
+          Kurikulum Merdeka Kelas X TKR ⚙️
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="measuring-main-layout">
+        
+        <!-- Left Side: Dashboard Info & Selector -->
+        <div class="measuring-sidebar">
+          
+          <!-- Tool Navigation Tabs -->
+          <div class="measuring-tabs-container">
+            <button class="measuring-tab-btn active" data-tool="caliper" type="button">Jangka Sorong</button>
+            <button class="measuring-tab-btn" data-tool="micrometer" type="button">Mikrometer Luar</button>
+            <button class="measuring-tab-btn" data-tool="multimeter" type="button">Multimeter Analog</button>
+            <button class="measuring-tab-btn" data-tool="dial" type="button">Dial Indicator</button>
+          </div>
+
+          <!-- Tool Info Card -->
+          <div class="measuring-info-card">
+            
+            <div style="display: flex; gap: 15px; align-items: center;">
+              <img id="measuring-tool-img" src="assets/measuring_caliper.png" alt="Alat Ukur" style="width: 70px; height: 70px; object-fit: contain; border-radius: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 5px;">
+              <h3 id="measuring-tool-title" style="font-size: 1.15rem; font-weight: 850; color: var(--clr-secondary); margin: 0;">Jangka Sorong (Vernier Caliper)</h3>
+            </div>
+            
+            <p id="measuring-tool-desc" style="font-size: 0.85rem; line-height: 1.6; color: #e2e8f0; margin: 0;">
+              Digunakan untuk mengukur diameter luar, diameter dalam, dan kedalaman suatu benda kerja secara presisi.
+            </p>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
+              <h4 style="font-size: 0.85rem; font-weight: 800; color: #fff; margin: 0 0 6px 0;">🛠️ Prosedur Penggunaan (SOP):</h4>
+              <p id="measuring-tool-usage" style="font-size: 0.8rem; line-height: 1.5; color: #cbd5e1; margin: 0;">
+                1. Bersihkan rahang jangka sorong dan benda kerja.<br>2. Rapatkan rahang, pastikan posisi nol sejajar (kalibrasi).
+              </p>
+            </div>
+
+            <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
+              <h4 style="font-size: 0.85rem; font-weight: 800; color: #fff; margin: 0 0 6px 0;">📖 Langkah Pembacaan Skala:</h4>
+              <p id="measuring-tool-reading" style="font-size: 0.8rem; line-height: 1.5; color: #cbd5e1; margin: 0;">
+                1. Baca angka nol skala nonius pada skala utama.<br>2. Cari garis nonius yang paling sejajar/lurus.
+              </p>
+            </div>
+
+            <button id="btn-measuring-start-quiz" class="btn btn-secondary" style="margin-top: auto; padding: 10px; font-size: 0.85rem; font-weight: 850; border-radius: 50px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: 1.5px solid var(--clr-primary);" type="button">
+              📝 Mulai Kuis Alat Ukur
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Right Side: Interactive Workshop Simulator -->
+        <div class="measuring-workspace-column">
+          
+          <!-- Mode Selectors Header -->
+          <div class="measuring-mode-header">
+            <span style="font-size: 0.85rem; font-weight: 800; color: #cbd5e1;">SIMULATOR WORKSHOP</span>
+            <div style="display: flex; gap: 8px;">
+              <button id="btn-measuring-mode-learn" class="measuring-mode-btn active" type="button">Belajar (HUD On)</button>
+              <button id="btn-measuring-mode-practice" class="measuring-mode-btn" type="button">Uji Kemampuan</button>
+            </div>
+          </div>
+
+          <!-- Interactive Workspace -->
+          <div class="measuring-sim-viewport">
+            
+            <!-- Simulasi Workspace Container -->
+            <div id="measuring-simulator-workspace" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; gap: 20px;">
+              
+              <!-- 1. JANGKA SORONG SIMULATOR BOX -->
+              <div id="sim-caliper-box" style="width: 100%; display: none;">
+                <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center;">
+                  <!-- Caliper SVG (Dynamic Vernier Caliper Scale 0.05mm graduation) -->
+                  <svg width="460" height="150" viewBox="0 0 460 150" style="background: rgba(15, 23, 42, 0.7); border-radius: 8px; border: 1.5px solid #0d9488; box-shadow: 0 0 10px rgba(13,148,136,0.3);">
+                    <!-- Background grids -->
+                    <line x1="0" y1="50" x2="460" y2="50" stroke="rgba(255,255,255,0.05)" stroke-width="1"></line>
+                    <line x1="0" y1="100" x2="460" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"></line>
+                    <!-- Fixed Jaws outer left -->
+                    <rect x="0" y="20" width="10" height="80" fill="#475569" stroke="#94a3b8" stroke-width="1"></rect>
+                    <!-- Gap area for measurement -->
+                    <rect id="caliper-svg-jaws-gap" x="10" y="20" width="0" height="80" fill="rgba(13, 148, 136, 0.15)"></rect>
+                    
+                    <!-- Main Scale (Skala Utama - top scale) -->
+                    <g id="caliper-svg-main" transform="translate(10, 0)">
+                      <!-- Centerline -->
+                      <line x1="0" y1="50" x2="440" y2="50" stroke="#94a3b8" stroke-width="2"></line>
+                      <!-- Ticks (spaced 5.2px = 1 mm. Total 80 mm) -->
+                      <!-- Tick generation in SVG -->
+                      <!-- 0, 10, 20, 30, ... mm -->
+                      <!-- We will draw key lines, JavaScript handles layout -->
+                      <line x1="0" y1="30" x2="0" y2="50" stroke="#fff" stroke-width="2"></line>
+                      <text x="0" y="25" fill="#fff" font-size="9" font-family="monospace" text-anchor="middle">0</text>
+                      
+                      <!-- 10 mm -->
+                      <line x1="52" y1="30" x2="52" y2="50" stroke="#94a3b8" stroke-width="1.5"></line>
+                      <text x="52" y="25" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="middle">10</text>
+                      
+                      <!-- 20 mm -->
+                      <line x1="104" y1="30" x2="104" y2="50" stroke="#94a3b8" stroke-width="1.5"></line>
+                      <text x="104" y="25" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="middle">20</text>
+                      
+                      <!-- 30 mm -->
+                      <line x1="156" y1="30" x2="156" y2="50" stroke="#94a3b8" stroke-width="1.5"></line>
+                      <text x="156" y="25" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="middle">30</text>
+
+                      <!-- 40 mm -->
+                      <line x1="208" y1="30" x2="208" y2="50" stroke="#94a3b8" stroke-width="1.5"></line>
+                      <text x="208" y="25" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="middle">40</text>
+
+                      <!-- 50 mm -->
+                      <line x1="260" y1="30" x2="260" y2="50" stroke="#94a3b8" stroke-width="1.5"></line>
+                      <text x="260" y="25" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="middle">50</text>
+
+                      <!-- 60 mm -->
+                      <line x1="312" y1="30" x2="312" y2="50" stroke="#94a3b8" stroke-width="1.5"></line>
+                      <text x="312" y="25" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="middle">60</text>
+
+                      <!-- Sub divisions (1mm marks) -->
+                      <!-- We draw simple ticks for a realistic look in the SVG viewport -->
+                      <path d="M 5.2,40 L 5.2,50 M 10.4,40 L 10.4,50 M 15.6,40 L 15.6,50 M 20.8,40 L 20.8,50 M 26,35 L 26,50 M 31.2,40 L 31.2,50 M 36.4,40 L 36.4,50 M 41.6,40 L 41.6,50 M 46.8,40 L 46.8,50 M 52,30 L 52,50" stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                      <path d="M 57.2,40 L 57.2,50 M 62.4,40 L 62.4,50 M 67.6,40 L 67.6,50 M 72.8,40 L 72.8,50 M 78,35 L 78,50 M 83.2,40 L 83.2,50 M 88.4,40 L 88.4,50 M 93.6,40 L 93.6,50 M 98.8,40 L 98.8,50 M 104,30 L 104,50" stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                      <path d="M 109.2,40 L 109.2,50 M 114.4,40 L 114.4,50 M 119.6,40 L 119.6,50 M 124.8,40 L 124.8,50 M 130,35 L 130,50 M 135.2,40 L 135.2,50 M 140.4,40 L 140.4,50 M 145.6,40 L 145.6,50 M 150.8,40 L 150.8,50 M 156,30 L 156,50" stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                      <path d="M 161.2,40 L 161.2,50 M 166.4,40 L 166.4,50 M 171.6,40 L 171.6,50 M 176.8,40 L 176.8,50 M 182,35 L 182,50 M 187.2,40 L 187.2,50 M 192.4,40 L 192.4,50 M 197.6,40 L 197.6,50 M 202.8,40 L 202.8,50 M 208,30 L 208,50" stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                      <path d="M 213.2,40 L 213.2,50 M 218.4,40 L 218.4,50 M 223.6,40 L 223.6,50 M 228.8,40 L 228.8,50 M 234,35 L 234,50 M 239.2,40 L 239.2,50 M 244.4,40 L 244.4,50 M 249.6,40 L 249.6,50 M 254.8,40 L 254.8,50 M 260,30 L 260,50" stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                    </g>
+
+                    <!-- Vernier Slide (Skala Nonius - bottom slide) -->
+                    <g id="caliper-svg-vernier" transform="translate(0, 0)">
+                      <!-- Slide frame block -->
+                      <rect x="10" y="50" width="130" height="50" fill="#334155" stroke="#64748b" stroke-width="1" opacity="0.9"></rect>
+                      <!-- Vernier rahang kanan jaw -->
+                      <path d="M 10,50 L 10,100 L 0,100 L 0,50 Z" fill="#64748b"></path>
+                      
+                      <!-- Vernier Baseline -->
+                      <line x1="10" y1="50" x2="114" y2="50" stroke="#e2e8f0" stroke-width="2"></line>
+                      <!-- Vernier Ticks (Total 20 divisions over 19mm in real caliper. Spacing = 19 * 5.2 / 20 = 4.94px) -->
+                      <!-- Line 0 -->
+                      <line x1="10" y1="50" x2="10" y2="70" stroke="#fff" stroke-width="2"></line>
+                      <text x="10" y="82" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">0</text>
+                      
+                      <!-- Line 0.25 (5 scale mark) -->
+                      <line x1="34.7" y1="50" x2="34.7" y2="65" stroke="#94a3b8" stroke-width="1"></line>
+                      
+                      <!-- Line 0.5 (10 scale mark, labeled 5) -->
+                      <line x1="59.4" y1="50" x2="59.4" y2="70" stroke="#fff" stroke-width="1.5"></line>
+                      <text x="59.4" y="82" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">5</text>
+                      
+                      <!-- Line 0.75 -->
+                      <line x1="84.1" y1="50" x2="84.1" y2="65" stroke="#94a3b8" stroke-width="1"></line>
+
+                      <!-- Line 1.0 (20 scale mark, labeled 10) -->
+                      <line x1="108.8" y1="50" x2="108.8" y2="70" stroke="#fff" stroke-width="2"></line>
+                      <text x="108.8" y="82" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">10</text>
+                      
+                      <!-- Subdivisions between main labels (0.05 mm marks) -->
+                      <!-- Division spacing: 4.94px -->
+                      <path d="M 14.94,50 L 14.94,60 M 19.88,50 L 19.88,60 M 24.82,50 L 24.82,60 M 29.76,50 L 29.76,60
+                               M 39.64,50 L 39.64,60 M 44.58,50 L 44.58,60 M 49.52,50 L 49.52,60 M 54.46,50 L 54.46,60
+                               M 64.34,50 L 64.34,60 M 69.28,50 L 69.28,60 M 74.22,50 L 74.22,60 M 79.16,50 L 79.16,60
+                               M 89.04,50 L 89.04,60 M 93.98,50 L 93.98,60 M 98.92,50 L 98.92,60 M 103.86,50 L 103.86,60" 
+                            stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                    </g>
+                  </svg>
+                </div>
+                
+                <!-- Manual Controls (only visible in learn mode) -->
+                <div id="caliper-manual-control" class="measuring-control-panel">
+                  <label style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1; display: flex; justify-content: space-between;">
+                    <span>Seret Slider untuk Menggeser Rahang Jangka Sorong:</span>
+                    <span id="caliper-slider-value" style="color: #00f5ff; font-weight: 800;"></span>
+                  </label>
+                  <input type="range" id="caliper-range-input" class="hud-range-slider" min="0" max="35" step="0.05" value="0">
+                  <div style="font-size: 0.95rem; font-weight: 850; color: #cbd5e1; text-align: center; margin-top: 5px;">
+                    Hasil Pembacaan HUD: <span id="caliper-hud-readout" class="hud-readout-value">0.00 mm</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. MIKROMETER LUAR SIMULATOR BOX -->
+              <div id="sim-micrometer-box" style="width: 100%; display: none;">
+                <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center;">
+                  <!-- Micrometer SVG (Sleeve and Thimble zoom view) -->
+                  <svg width="460" height="150" viewBox="0 0 460 150" style="background: rgba(15, 23, 42, 0.7); border-radius: 8px; border: 1.5px solid #0d9488; box-shadow: 0 0 10px rgba(13,148,136,0.3);">
+                    <!-- Sleeve Fixed Frame (Left side) -->
+                    <rect x="0" y="30" width="280" height="90" fill="#334155" stroke="#475569" stroke-width="1.5"></rect>
+                    <!-- Centerline Sleeve -->
+                    <line x1="10" y1="75" x2="280" y2="75" stroke="#fff" stroke-width="2"></line>
+                    
+                    <!-- Sleeve Ticks (Spaced every 12px = 1.0 mm. Total 20 mm scale) -->
+                    <!-- Upper Ticks (1.0 mm marks) -->
+                    <!-- 0, 5, 10, 15, 20 -->
+                    <g transform="translate(10, 0)" stroke="#fff" stroke-width="1.5">
+                      <!-- Ticks & Labels -->
+                      <line x1="0" y1="55" x2="0" y2="75"></line>
+                      <text x="0" y="48" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle" stroke="none">0</text>
+                      
+                      <line x1="60" y1="55" x2="60" y2="75"></line>
+                      <text x="60" y="48" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle" stroke="none">5</text>
+                      
+                      <line x1="120" y1="55" x2="120" y2="75"></line>
+                      <text x="120" y="48" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle" stroke="none">10</text>
+                      
+                      <line x1="180" y1="55" x2="180" y2="75"></line>
+                      <text x="180" y="48" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle" stroke="none">15</text>
+
+                      <line x1="240" y1="55" x2="240" y2="75"></line>
+                      <text x="240" y="48" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle" stroke="none">20</text>
+                      
+                      <!-- Minor 1mm lines -->
+                      <path d="M 12,62 L 12,75 M 24,62 L 24,75 M 36,62 L 36,75 M 48,62 L 48,75
+                               M 72,62 L 72,75 M 84,62 L 84,75 M 96,62 L 96,75 M 108,62 L 108,75
+                               M 132,62 L 132,75 M 144,62 L 144,75 M 156,62 L 156,75 M 168,62 L 168,75
+                               M 192,62 L 192,75 M 204,62 L 204,75 M 216,62 L 216,75 M 228,62 L 228,75" 
+                            stroke="rgba(255,255,255,0.6)" stroke-width="1"></path>
+                            
+                      <!-- Lower Ticks (0.5 mm marks - offset by 6px) -->
+                      <path d="M 6,75 L 6,85 M 18,75 L 18,85 M 30,75 L 30,85 M 42,75 L 42,85 M 54,75 L 54,85
+                               M 66,75 L 66,85 M 78,75 L 78,85 M 90,75 L 90,85 M 102,75 L 102,85 M 114,75 L 114,85
+                               M 126,75 L 126,85 M 138,75 L 138,85 M 150,75 L 150,85 M 162,75 L 162,85 M 174,75 L 174,85
+                               M 186,75 L 186,85 M 198,75 L 198,85 M 210,75 L 210,85 M 222,75 L 222,85 M 234,75 L 234,85" 
+                            stroke="rgba(255,255,255,0.5)" stroke-width="1"></path>
+                    </g>
+                    
+                    <!-- Thimble Sliding Scale (Right side) -->
+                    <!-- Spindle horizontal translation: 1 mm = 12px -->
+                    <g id="micrometer-svg-thimble" transform="translate(0, 0)">
+                      <!-- Bevel / Thimble Frame (starts at x=10) -->
+                      <path d="M 10,20 L 40,30 L 40,120 L 10,130 Z" fill="#475569" stroke="#64748b" stroke-width="1.5"></path>
+                      <rect x="40" y="30" width="120" height="90" fill="#334155" stroke="#475569" stroke-width="1"></rect>
+                      
+                      <!-- Thimble Bevel edge line (Baseline at x=10) -->
+                      <line x1="10" y1="30" x2="10" y2="120" stroke="#fff" stroke-width="2"></line>
+                      
+                      <!-- Thimble Scrollable Ticks (vertical tick markings. 50 divisions. Spaced every 6.4px vertically. Total 320px list height) -->
+                      <!-- Center is y=75. Scale Mark 0 is initially at y=75. -->
+                      <g id="micrometer-svg-thimble-ticks" transform="translate(0, 0)">
+                        <!-- Generate marks 0 to 45 (we list key ticks, JavaScript handles transition) -->
+                        <!-- 0 mark -->
+                        <line x1="10" y1="75" x2="25" y2="75" stroke="#fff" stroke-width="2"></line>
+                        <text x="28" y="78" fill="#fff" font-size="8" font-family="monospace" stroke="none">0</text>
+                        
+                        <!-- 5 mark -->
+                        <line x1="10" y1="43" x2="22" y2="43" stroke="#e2e8f0" stroke-width="1.5"></line>
+                        <text x="25" y="46" fill="#e2e8f0" font-size="8" font-family="monospace" stroke="none">5</text>
+                        
+                        <!-- 10 mark -->
+                        <line x1="10" y1="11" x2="22" y2="11" stroke="#e2e8f0" stroke-width="1.5"></line>
+                        <text x="25" y="14" fill="#e2e8f0" font-size="8" font-family="monospace" stroke="none">10</text>
+
+                        <!-- 45 mark -->
+                        <line x1="10" y1="107" x2="22" y2="107" stroke="#e2e8f0" stroke-width="1.5"></line>
+                        <text x="25" y="110" fill="#e2e8f0" font-size="8" font-family="monospace" stroke="none">45</text>
+
+                        <!-- 40 mark -->
+                        <line x1="10" y1="139" x2="22" y2="139" stroke="#e2e8f0" stroke-width="1.5"></line>
+                        <text x="25" y="142" fill="#e2e8f0" font-size="8" font-family="monospace" stroke="none">40</text>
+                        
+                        <!-- Minor subdivisions vertically spaced 6.4px -->
+                        <path d="M 10,17.4 L 18,17.4 M 10,23.8 L 18,23.8 M 10,30.2 L 18,30.2 M 10,36.6 L 18,36.6
+                                 M 10,49.4 L 18,49.4 M 10,55.8 L 18,55.8 M 10,62.2 L 18,62.2 M 10,68.6 L 18,68.6
+                                 M 10,81.4 L 18,81.4 M 10,87.8 L 18,87.8 M 10,94.2 L 18,94.2 M 10,100.6 L 18,100.6
+                                 M 10,113.4 L 18,113.4 M 10,119.8 L 18,119.8 M 10,126.2 L 18,126.2 M 10,132.6 L 18,132.6" 
+                              stroke="rgba(255,255,255,0.4)" stroke-width="1"></path>
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+
+                <!-- Manual Controls -->
+                <div id="micrometer-manual-control" class="measuring-control-panel">
+                  <label style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1; display: flex; justify-content: space-between;">
+                    <span>Geser Slider untuk Memutar Thimble Mikrometer:</span>
+                    <span id="micrometer-slider-value" style="color: #00f5ff; font-weight: 800;"></span>
+                  </label>
+                  <input type="range" id="micrometer-range-input" class="hud-range-slider" min="0" max="20" step="0.01" value="0">
+                  <div style="font-size: 0.95rem; font-weight: 850; color: #cbd5e1; text-align: center; margin-top: 5px;">
+                    Hasil Pembacaan HUD: <span id="micrometer-hud-readout" class="hud-readout-value">0.00 mm</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. MULTIMETER ANALOG SIMULATOR BOX -->
+              <div id="sim-multimeter-box" style="width: 100%; display: none;">
+                <div style="display: flex; gap: 20px; width: 100%; flex-wrap: wrap;">
+                  <!-- Multimeter Face SVG -->
+                  <div style="flex: 1; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center; min-width: 250px;">
+                    <svg width="300" height="240" viewBox="0 0 300 240" style="background: rgba(15, 23, 42, 0.75); border-radius: 12px; border: 1.5px solid #0d9488;">
+                      <!-- Dial background arcs -->
+                      <!-- Resistance Ohm Scale (top non-linear arc, green) -->
+                      <path d="M 50 113 A 120 120 0 0 1 250 113" fill="none" stroke="#10b981" stroke-width="3" stroke-dasharray="1 3"></path>
+                      <text x="50" y="125" fill="#10b981" font-size="8" font-family="monospace">∞</text>
+                      <text x="100" y="70" fill="#10b981" font-size="8" font-family="monospace">100</text>
+                      <text x="150" y="55" fill="#10b981" font-size="8" font-family="monospace">22</text>
+                      <text x="200" y="70" fill="#10b981" font-size="8" font-family="monospace">5</text>
+                      <text x="250" y="125" fill="#10b981" font-size="8" font-family="monospace">0</text>
+                      
+                      <!-- DCV/ACV Scale (middle linear arc, white) -->
+                      <path d="M 60 122 A 110 110 0 0 1 240 122" fill="none" stroke="#ffffff" stroke-width="2"></path>
+                      <!-- Linear ticks 0, 10, 20, 30, 40, 50 -->
+                      <text x="56" y="138" fill="#fff" font-size="7" font-family="monospace">0</text>
+                      <text x="94" y="93" fill="#fff" font-size="7" font-family="monospace">10</text>
+                      <text x="146" y="80" fill="#fff" font-size="7" font-family="monospace">25</text>
+                      <text x="198" y="93" fill="#fff" font-size="7" font-family="monospace">40</text>
+                      <text x="238" y="138" fill="#fff" font-size="7" font-family="monospace">50</text>
+
+                      <!-- Pivot point housing -->
+                      <circle cx="150" cy="200" r="16" fill="#1e293b" stroke="#475569" stroke-width="2"></circle>
+                      <circle cx="150" cy="200" r="6" fill="#000"></circle>
+                      
+                      <!-- Needle pointer (Rotates dynamically centered at 150, 200) -->
+                      <line id="multimeter-svg-needle" x1="150" y1="200" x2="150" y2="40" stroke="#ef4444" stroke-width="2" transform="rotate(-60, 150, 200)"></line>
+                    </svg>
+                  </div>
+
+                  <!-- Probe Targets & Settings (Otomotif load targets) -->
+                  <div style="flex: 1.2; display: flex; flex-direction: column; gap: 12px; min-width: 250px;">
+                    <div style="background: rgba(15, 23, 42, 0.4); padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 8px;">
+                      <label for="multimeter-selector" style="font-size: 0.82rem; font-weight: 700; color: var(--clr-secondary);">Range Selector Multimeter:</label>
+                      <select id="multimeter-selector" class="select-field" style="width: 100%; font-size: 0.85rem; padding: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 6px;">
+                        <option value="DCV10">DCV 10 (Tegangan Aki/Baterai Kecil)</option>
+                        <option value="DCV50">DCV 50 (Tegangan Sistem Pengisian Aki Mobil)</option>
+                        <option value="ACV250">ACV 250 (Tegangan PLN Bengkel)</option>
+                        <option value="Ohm10">Ohm x10 (Tahanan Sensor/Kabel)</option>
+                      </select>
+                    </div>
+
+                    <!-- Connect Probes Targets -->
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                      <span style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1;">Sentuh Beban untuk Menghubungkan Probe Multimeter:</span>
+                      
+                      <button class="multimeter-probe-target btn btn-sm" data-type="battery" data-value="1.5" style="padding: 8px 12px; font-size: 0.78rem; text-align: left; display: flex; justify-content: space-between; align-items: center;" type="button">
+                        <span>🔋 Hubungkan ke Sel Baterai Kering</span>
+                        <span style="color: var(--clr-primary); font-weight: 700;">(1.5V DC)</span>
+                      </button>
+                      
+                      <button class="multimeter-probe-target btn btn-sm" data-type="battery" data-value="12.0" style="padding: 8px 12px; font-size: 0.78rem; text-align: left; display: flex; justify-content: space-between; align-items: center;" type="button">
+                        <span>🚗 Hubungkan ke Terminal Aki Avanza</span>
+                        <span style="color: var(--clr-primary); font-weight: 700;">(12V DC)</span>
+                      </button>
+
+                      <button class="multimeter-probe-target btn btn-sm" data-type="pln" data-value="220" style="padding: 8px 12px; font-size: 0.78rem; text-align: left; display: flex; justify-content: space-between; align-items: center;" type="button">
+                        <span>🔌 Hubungkan ke Stop Kontak Bengkel</span>
+                        <span style="color: var(--clr-error-light); font-weight: 700;">(220V AC)</span>
+                      </button>
+
+                      <button class="multimeter-probe-target btn btn-sm" data-type="resistor" data-value="220" style="padding: 8px 12px; font-size: 0.78rem; text-align: left; display: flex; justify-content: space-between; align-items: center;" type="button">
+                        <span>🧲 Hubungkan ke Tahanan Sensor Coil</span>
+                        <span style="color: #10b981; font-weight: 700;">(22 Ohm)</span>
+                      </button>
+                    </div>
+
+                    <!-- HUD multimeter output (only in learn mode) -->
+                    <div id="multimeter-manual-control" style="font-size: 0.9rem; font-weight: 850; color: #cbd5e1; text-align: center; margin-top: 15px;">
+                      Hasil Pembacaan HUD: <span id="multimeter-hud-readout" class="hud-readout-value">Probe Terlepas</span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. DIAL INDICATOR SIMULATOR BOX -->
+              <div id="sim-dial-box" style="width: 100%; display: none;">
+                <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: center;">
+                  <!-- Dial Indicator SVG -->
+                  <svg width="220" height="250" viewBox="0 0 220 250" style="background: rgba(15, 23, 42, 0.7); border-radius: 50%; border: 2px solid #0d9488; box-shadow: 0 0 10px rgba(13,148,136,0.3);">
+                    <!-- Main dial face circle (outer dial) -->
+                    <circle cx="110" cy="110" r="95" fill="rgba(30,41,59,0.8)" stroke="#64748b" stroke-width="4"></circle>
+                    <circle cx="110" cy="110" r="90" fill="none" stroke="#fff" stroke-width="1" stroke-dasharray="1.5 2.2"></circle>
+                    
+                    <!-- Major Dial Ticks & Labels (0, 10, 20, ..., 90) -->
+                    <text x="110" y="32" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">0</text>
+                    <text x="188" y="113" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">25</text>
+                    <text x="110" y="194" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">50</text>
+                    <text x="32" y="113" fill="#fff" font-size="8" font-family="monospace" text-anchor="middle">75</text>
+                    
+                    <!-- Small counter dial (0 to 10 mm revolution counter) -->
+                    <!-- Center at (80, 110), radius 20 -->
+                    <circle cx="80" cy="110" r="20" fill="rgba(15,23,42,0.9)" stroke="#475569" stroke-width="1"></circle>
+                    <path d="M 80,92 A 18 18 0 0 1 80,128" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1" stroke-dasharray="1 1.5"></path>
+                    <text x="80" y="103" fill="rgba(255,255,255,0.6)" font-size="6" font-family="monospace" text-anchor="middle">0</text>
+                    <text x="80" y="125" fill="rgba(255,255,255,0.6)" font-size="6" font-family="monospace" text-anchor="middle">5</text>
+                    
+                    <!-- Small counter needle -->
+                    <line id="dial-svg-sub-needle" x1="80" y1="110" x2="80" y2="95" stroke="#ef4444" stroke-width="1.5" transform="rotate(0, 80, 110)"></line>
+                    
+                    <!-- Spindle plunger shaft (bottom stem) -->
+                    <!-- Plunger displacement: spindle translations vertically -->
+                    <g id="dial-svg-plunger" transform="translate(0, 0)">
+                      <rect x="107" y="200" width="6" height="50" fill="#94a3b8" stroke="#475569" stroke-width="1"></rect>
+                      <!-- Contact point tip -->
+                      <circle cx="110" cy="250" r="5" fill="#64748b"></circle>
+                    </g>
+                    
+                    <!-- Center pins -->
+                    <circle cx="110" cy="110" r="10" fill="#1e293b" stroke="#475569" stroke-width="1.5"></circle>
+                    <circle cx="110" cy="110" r="3" fill="#000"></circle>
+                    
+                    <!-- Main pointer needle: rotates centered at (110, 110) -->
+                    <path id="dial-svg-main-needle" d="M110 120 L107 110 L110 24 L113 110 Z" fill="#ef4444" transform="rotate(0, 110, 110)"></path>
+                  </svg>
+                </div>
+
+                <!-- Manual Controls -->
+                <div id="dial-manual-control" class="measuring-control-panel">
+                  <label style="font-size: 0.85rem; font-weight: 700; color: #cbd5e1; display: flex; justify-content: space-between;">
+                    <span>Geser Slider untuk Menekan Spindle Plunger Dial Gauge:</span>
+                    <span id="dial-slider-value" style="color: #00f5ff; font-weight: 800;"></span>
+                  </label>
+                  <input type="range" id="dial-range-input" class="hud-range-slider" min="0" max="5" step="0.01" value="0">
+                  <div style="font-size: 0.95rem; font-weight: 850; color: #cbd5e1; text-align: center; margin-top: 5px;">
+                    Hasil Pembacaan HUD: <span id="dial-hud-readout" class="hud-readout-value">0.00 mm</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- UJI KEMAMPUAN PRACTICE CONTROLS BOX (visible only in practice mode) -->
+            <div id="measuring-practice-controls" style="display: none; background: rgba(15,23,42,0.9); border: 2.5px solid var(--clr-secondary); border-radius: 20px; padding: 20px; width: 95%; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; box-sizing: border-box; margin-top: 15px;">
+              <h4 style="color: var(--clr-secondary); font-weight: 850; margin: 0 0 10px 0; font-size: 0.95rem; text-transform: uppercase;">Uji Kemampuan Membaca Alat Ukur</h4>
+              <p style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.5; margin: 0 0 15px 0;">
+                Bacalah hasil pengukuran yang ditampilkan pada simulator di atas dengan teliti, kemudian masukkan jawaban Anda di bawah ini:
+              </p>
+              
+              <div style="display: flex; gap: 10px; margin-bottom: 12px; justify-content: center; align-items: center;">
+                <input type="text" id="measuring-practice-ans" style="padding: 10px 16px; font-size: 1.1rem; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.3); color: white; width: 140px; text-align: center; font-weight: 700; font-family: monospace;" placeholder="Nilai...">
+                <span style="font-size: 1rem; font-weight: 700; color: #cbd5e1;">mm / Volt / Ohm</span>
+              </div>
+
+              <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="btn-measuring-check" class="btn btn-primary" style="padding: 8px 20px; font-size: 0.82rem; font-weight: 850; border-radius: 50px; cursor: pointer;" type="button">Periksa Jawaban 🔍</button>
+                <button id="btn-measuring-new-val" class="btn" style="padding: 8px 16px; font-size: 0.82rem; font-weight: 700; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; cursor: pointer;" type="button">Acak Nilai 🎲</button>
+              </div>
+
+              <!-- Feedback box -->
+              <div id="measuring-practice-feedback" style="margin-top: 15px; font-size: 0.85rem; font-weight: 700; display: none;"></div>
+            </div>
+
+            <!-- 5. KUIS EVALUASI WORKSPACE (visible only when quiz is active) -->
+            <div id="measuring-quiz-workspace" style="display: none; flex-direction: column; gap: 18px; width: 100%; height: 100%; justify-content: center; align-items: center; max-width: 480px; box-sizing: border-box; text-align: center;">
+              
+              <h3 id="measuring-quiz-header-title" style="font-size: 1.25rem; font-weight: 850; color: var(--clr-primary); margin: 0;">Kuis Evaluasi — Pertanyaan 1 dari 3</h3>
+              
+              <div style="background: rgba(30,41,59,0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px; width: 100%; box-sizing: border-box;">
+                <p id="measuring-quiz-question-text" style="font-size: 0.95rem; font-weight: 700; color: white; line-height: 1.6; margin: 0 0 15px 0;">Pertanyaan kuis...</p>
+                <div id="measuring-quiz-options-box" style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
+                  <!-- Options generated dynamically -->
+                </div>
+              </div>
+
+              <!-- Quiz Feedback Status -->
+              <div id="measuring-quiz-status-box" style="font-size: 0.85rem; font-weight: 700; display: none;"></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 12 — NAME INPUT MODAL
+         ───────────────────────────────────────────────────── -->
+    <div id="modal-name" role="dialog" aria-modal="true" aria-labelledby="modal-name-title">
+      <div class="modal-overlay"></div>
+      <div class="modal-card">
+        <div class="modal-icon" aria-hidden="true">🧑‍🔧</div>
+        <h2 id="modal-name-title">Selamat Datang, Mekanik!</h2>
+        <p>Masukkan namamu untuk memulai perjalanan di bengkel virtual.</p>
+        <input type="text" id="input-name" placeholder="Ketik nama kamu…" maxlength="30" autocomplete="off" aria-label="Masukkan nama pemain">
+        <button id="btn-save-name" class="btn btn-primary btn-lg" type="button">
+          🚀 Mulai!
+        </button>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 13 — EDIT PROFILE MODAL
+         ───────────────────────────────────────────────────── -->
+    <div id="modal-profile" role="dialog" aria-modal="true" aria-labelledby="modal-profile-title">
+      <div class="modal-overlay"></div>
+      <div class="modal-card" style="max-width: 480px; text-align: left;">
+        <h2 id="modal-profile-title" style="text-align: center; margin-bottom: var(--sp-sm);">👤 Edit Profil</h2>
+        <p style="text-align: center; margin-bottom: var(--sp-md); font-size: 0.9rem; color: var(--text-secondary);">Perbarui detail profil dan pilih avatar unik Anda.</p>
+        
+        <div class="profile-avatar-section">
+          <label class="form-label" style="text-align: center; display: block; margin-bottom: var(--sp-sm);">Pilih Avatar Mekanik</label>
+          <div class="avatar-grid">
+            <button class="avatar-option-btn" type="button" data-avatar="🧑‍🔧">
+              <span class="avatar-emoji">🧑‍🔧</span>
+              <span class="avatar-label">Mekanik</span>
+            </button>
+            <button class="avatar-option-btn" type="button" data-avatar="⚡">
+              <span class="avatar-emoji">⚡</span>
+              <span class="avatar-label">Kelistrikan</span>
+            </button>
+            <button class="avatar-option-btn" type="button" data-avatar="🏎️">
+              <span class="avatar-emoji">🏎️</span>
+              <span class="avatar-label">Pembalap</span>
+            </button>
+            <button class="avatar-option-btn" type="button" data-avatar="⚙️">
+              <span class="avatar-emoji">⚙️</span>
+              <span class="avatar-label">Mesin</span>
+            </button>
+            <button class="avatar-option-btn" type="button" data-avatar="🛠️">
+              <span class="avatar-emoji">🛠️</span>
+              <span class="avatar-label">Perkakas</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="form-edit-profile" onsubmit="event.preventDefault();" style="margin-top: var(--sp-md);">
+          <div class="profile-form-group">
+            <label for="profile-name">Nama Lengkap</label>
+            <input type="text" id="profile-name" class="profile-input" placeholder="Nama Lengkap" required maxlength="30">
+          </div>
+
+          <div class="profile-buttons">
+            <button type="button" id="btn-close-profile" class="btn btn-secondary" style="flex: 1;">Batal</button>
+            <button type="submit" id="btn-save-profile" class="btn btn-primary" style="flex: 1;">Simpan 💾</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+
+    <!-- ─────────────────────────────────────────────────────
+         TOAST / NOTIFICATION
+         ───────────────────────────────────────────────────── -->
+    <div id="toast" role="alert" aria-live="polite">
+      <span class="toast-icon">🏆</span>
+      <div class="toast-content">
+        <div class="toast-title">Pencapaian Baru!</div>
+        <div class="toast-message">Kamu mendapatkan badge "Langkah Pertama"</div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 14 — WORKSHOP TOOLS GUIDE MODAL
+         ───────────────────────────────────────────────────── -->
+    <div id="modal-tools-guide" role="dialog" aria-modal="true" aria-labelledby="modal-tools-title" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
+      <!-- Container Kartu Modal Utama -->
+      <div class="modal-card book-modal-card" style="max-width: 900px; width: 95%; height: 85vh; background: rgba(15, 23, 42, 0.95); border: 2px solid var(--clr-primary); border-radius: 28px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: var(--sp-md); position: relative; overflow: hidden; backdrop-filter: blur(10px);">
+        
+        <!-- Header Modal -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: var(--sp-sm);">
+          <h2 id="modal-tools-title" style="font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 10px; font-size: 1.4rem;">
+            <span style="color: var(--clr-primary);">🔧</span> Perpustakaan &amp; Kunci Bengkel TKR
+          </h2>
+          <button type="button" id="btn-close-tools-guide" style="background: none; border: none; color: #ffffff; font-size: 2rem; line-height: 1; cursor: pointer; transition: color var(--transition-fast); opacity: 0.7;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">×</button>
+        </div>
+
+        <!-- LAYAR 1: DAFTAR BUKU (LIBRARY) -->
+        <div id="book-library-screen" style="display: flex; flex-direction: column; gap: var(--sp-md); overflow-y: auto; flex-grow: 1;">
+          <p style="color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.5;">
+            Selamat datang di perpustakaan digital TKR. Pilih salah satu buku di bawah ini untuk mempelajari nama, fungsi, dan penggunaan perkakas bengkel serta K3. Selesaikan buku dan kuisnya untuk mengklaim <strong>+50 XP</strong> per buku!
+          </p>
+          
+          <div class="books-library-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; padding: 10px 5px;">
+            <!-- Grid item untuk masing-masing dari 4 Buku akan dirender secara dinamis oleh JavaScript -->
+          </div>
+        </div>
+
+        <!-- LAYAR 2: INTERACTIVE BOOK READER (FLIP BOOK STYLE) -->
+        <div id="book-reader-screen" style="display: none; flex-direction: column; flex-grow: 1; justify-content: space-between; overflow: hidden;">
+          
+          <!-- Top back to library -->
+          <div style="margin-bottom: 10px;">
+            <button id="btn-back-to-library" class="btn btn-outline" style="padding: 6px 16px; font-size: 0.85rem; border-radius: 50px; background: rgba(255,255,255,0.03); display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">
+              <span>◀</span> Kembali ke Perpustakaan
+            </button>
+          </div>
+
+          <!-- The Book Spine & Sheets -->
+          <div class="book-container" style="display: flex; flex-grow: 1; background: rgba(7, 11, 23, 0.5); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; position: relative; margin-bottom: 15px;">
+            
+            <!-- Left Page: Image/Illustration -->
+            <div class="book-page book-page-left" style="width: 50%; border-right: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.4); padding: 20px; position: relative; box-sizing: border-box;">
+              <div id="reader-page-image-container" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                <img id="reader-page-image" src="" alt="Ilustrasi Alat" style="max-width: 90%; max-height: 85%; object-fit: contain; border-radius: 12px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));">
+              </div>
+            </div>
+
+            <!-- Right Page: Text & Literacy Content or Quiz -->
+            <div class="book-page book-page-right" style="width: 50%; display: flex; flex-direction: column; background: rgba(30, 41, 59, 0.2); padding: 25px; box-sizing: border-box; justify-content: flex-start; overflow-y: auto;">
+              <!-- Title -->
+              <h3 id="reader-page-title" style="font-size: 1.25rem; font-weight: 850; margin: 0 0 15px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">Judul Halaman</h3>
+              
+              <!-- Text content -->
+              <div id="reader-page-content" style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); flex-grow: 1;">
+                Konten literasi halaman buku...
+              </div>
+
+              <!-- Quiz area (only visible on quiz page) -->
+              <div id="reader-quiz-container" style="display: none; flex-direction: column; gap: 12px; flex-grow: 1;">
+                <p id="reader-quiz-question" style="font-size: 0.9rem; font-weight: 700; color: white; line-height: 1.5; margin-bottom: 8px;">Pertanyaan kuis...</p>
+                <div id="reader-quiz-options" style="display: flex; flex-direction: column; gap: 10px;">
+                  <!-- Options generated dynamically -->
+                </div>
+                <div id="reader-quiz-feedback" style="margin-top: 10px; font-size: 0.85rem; font-weight: 700; display: none;"></div>
+              </div>
+            </div>
+
+            <!-- Center Book Spine Shadow -->
+            <div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 20px; transform: translateX(-50%); background: linear-gradient(90deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.3) 100%); pointer-events: none; opacity: 0.7;"></div>
+          </div>
+
+          <!-- Bottom Reader Navigation Panel -->
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.08); padding-top: var(--sp-sm);">
+            <button id="btn-reader-prev" class="btn" style="padding: 10px 20px; border-radius: 50px; font-weight: 700; background: rgba(255,255,255,0.05); color: #fff; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);">Sebelumnya ◀</button>
+            <span id="reader-page-indicator" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">Halaman 1 dari 4</span>
+            <button id="btn-reader-next" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px; font-weight: 850; cursor: pointer;">Selanjutnya ▶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────
+         SCREEN 15 — INTERACTIVE K3 & APD GUIDE MODAL
+         ───────────────────────────────────────────────────── -->
+    <div id="modal-k3-guide" role="dialog" aria-modal="true" aria-labelledby="modal-k3-title" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 7, 18, 0.9); z-index: 10000; align-items: center; justify-content: center; backdrop-filter: blur(12px);">
+      <!-- Container Kartu Modal Utama -->
+      <div class="modal-card k3-modal-card" style="max-width: 950px; width: 95%; height: 85vh; background: rgba(15, 23, 42, 0.95); border: 2px solid var(--clr-secondary); border-radius: 28px; padding: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: var(--sp-md); position: relative; overflow: hidden; backdrop-filter: blur(10px);">
+        
+        <!-- Header Modal -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(255,255,255,0.08); padding-bottom: var(--sp-sm);">
+          <h2 id="modal-k3-title" style="font-weight: 900; color: #ffffff; display: flex; align-items: center; gap: 10px; font-size: 1.4rem;">
+            <span style="color: var(--clr-secondary);">🦺</span> Budaya K3 &amp; APD Keselamatan Kerja
+          </h2>
+          <button type="button" id="btn-close-k3-guide" style="background: none; border: none; color: #ffffff; font-size: 2rem; line-height: 1; cursor: pointer; transition: color var(--transition-fast); opacity: 0.7;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">×</button>
+        </div>
+
+        <!-- Layout Utama: Gambar Kiri & Info Kanan -->
+        <div style="display: flex; flex-grow: 1; gap: 30px; overflow: hidden; height: 100%;">
+          
+          <!-- Area Kiri: Ilustrasi Mekanik & Hotspots -->
+          <div style="width: 45%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(7, 11, 23, 0.5); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; overflow: hidden; position: relative;">
+            
+            <div style="position: relative; width: 100%; max-width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;">
+              <!-- Main Mechanic Image -->
+              <img src="assets/mechanic_apd.png" alt="Mechanic APD" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));">
+              
+              <!-- Vertical HUD connector line -->
+              <div class="apd-hud-connector-line" style="position: absolute; top: 18%; bottom: 18%; left: 70%; width: 2px; background: rgba(13, 148, 136, 0.3); box-shadow: 0 0 8px rgba(13, 148, 136, 0.5); pointer-events: none; z-index: 5;"></div>
+              
+              <!-- Hotspots (Aligned vertically at left: 70% to clear mechanic body & left labels) -->
+              <!-- Goggles -->
+              <button class="apd-hotspot-pin" data-apd="goggles" style="top: 22%; left: 70%;" title="Kacamata Pengaman">🥽</button>
+              <!-- Ear Muffs -->
+              <button class="apd-hotspot-pin" data-apd="earmuffs" style="top: 36%; left: 70%;" title="Pelindung Telinga">🎧</button>
+              <!-- Wearpack -->
+              <button class="apd-hotspot-pin" data-apd="wearpack" style="top: 50%; left: 70%;" title="Baju Wearpack">🦺</button>
+              <!-- Gloves -->
+              <button class="apd-hotspot-pin" data-apd="gloves" style="top: 64%; left: 70%;" title="Sarung Tangan">🧤</button>
+              <!-- Boots -->
+              <button class="apd-hotspot-pin" data-apd="boots" style="top: 78%; left: 70%;" title="Sepatu Safety">🥾</button>
+            </div>
+          </div>
+
+          <!-- Area Kanan: Penjelasan APD (Full Height) -->
+          <div style="width: 55%; display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+            <!-- Panel APD Detail (Membentang Penuh) -->
+            <div id="k3-apd-detail-panel" style="background: rgba(30, 41, 59, 0.25); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; padding-bottom: 90px; display: flex; flex-direction: column; gap: 20px; height: 100%; box-sizing: border-box; justify-content: flex-start; overflow-y: auto;">
+              <h3 id="k3-apd-title" style="font-size: 1.4rem; font-weight: 850; margin: 0; display: flex; align-items: center;">
+                🥽 Safety Goggles (Kacamata K3)
+              </h3>
+              <p id="k3-apd-desc" style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary); margin: 0;">
+                Membantu melindungi area mata secara menyeluruh dari gram logam bubut, debu kampas rem, percikan api las, dan zat kimia asam aki.
+              </p>
+              <div id="k3-apd-rules" style="background: rgba(0,0,0,0.25); border-radius: 16px; padding: 20px; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; border-left: 4px solid var(--clr-secondary);">
+                <strong>⚠️ Standar SOP Bengkel TKR:</strong><br>Wajib digunakan saat mengelas, membubut, membersihkan rem dengan kompresor udara, atau menuangkan air aki.
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Widget Asisten Robot 5R Mengambang (Pojok Kanan Bawah) -->
+        <div id="robot-assistant-widget" style="position: absolute; bottom: 25px; right: 25px; z-index: 100; display: flex; align-items: flex-end; gap: 15px;">
+          
+          <!-- Balon Percakapan 5R (Kiri - Sembunyi secara default) -->
+          <div id="robot-speech-bubble-container" style="display: none; background: rgba(15, 23, 42, 0.95); border: 1.5px solid var(--clr-secondary); border-radius: 18px; padding: 16px; width: 280px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); flex-direction: column; gap: 10px; box-sizing: border-box; text-align: left; backdrop-filter: blur(10px); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px;">
+              <h4 id="robot-speech-title" style="color: var(--clr-secondary); font-weight: 850; margin: 0; font-size: 0.88rem;">Budaya Kerja 5R</h4>
+              <button id="btn-close-robot-speech" style="background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; opacity: 0.6; line-height: 1;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">×</button>
+            </div>
+            <p id="robot-speech-text" style="font-size: 0.8rem; line-height: 1.5; color: var(--text-secondary); margin: 0;">
+              Materi penjelasan 5R...
+            </p>
+            <button id="btn-robot-next-5r" class="btn" style="padding: 5px 12px; font-size: 0.72rem; border-radius: 50px; background: var(--clr-secondary); color: white; border: none; font-weight: 800; cursor: pointer; align-self: flex-start; margin-top: 4px;">
+              Selanjutnya 🤖
+            </button>
+          </div>
+
+          <!-- Robot Avatar Trigger (Kanan) -->
+          <div id="robot-trigger-avatar" style="cursor: pointer; position: relative;" title="Klik untuk panduan Budaya Kerja 5R">
+            <img id="k3-robot-helper-img" src="assets/robot_k3_helper.png" alt="Robot Helper" style="height: 70px; width: 70px; object-fit: contain; animation: robot-float 1.5s infinite; filter: drop-shadow(0 4px 10px rgba(13, 148, 136, 0.45));">
+            <!-- Pulsing Badge -->
+            <span style="position: absolute; top: -5px; right: -5px; background: #eab308; color: #000; font-size: 0.65rem; font-weight: 900; padding: 2px 6px; border-radius: 10px; border: 1.5px solid #000; animation: apd-pulse 2s infinite;">5R</span>
+          </div>
+
+        </div>
+
+    <!-- ─────────────────────────────────────────────────────
+         GLOBAL BOTTOM NAVIGATION BAR
+         ───────────────────────────────────────────────────── -->
+    <div id="global-bottom-nav" class="bottom-nav-bar" style="display: none;">
+      <button class="nav-item" data-screen="menu" type="button" aria-label="Beranda">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Beranda</span>
+      </button>
+      <button class="nav-item" data-screen="scores" type="button" aria-label="Papan Skor">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-label">Peringkat</span>
+      </button>
+      <button class="nav-item center-btn" data-screen="map" type="button" aria-label="Peta Bengkel">
+        <span class="nav-icon">⚙️</span>
+      </button>
+      <button class="nav-item" data-screen="library" type="button" aria-label="Perpustakaan">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Pustaka</span>
+      </button>
+      <button class="nav-item" data-screen="settings" type="button" aria-label="Pengaturan">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">Profil</span>
+      </button>
+    </div>
+
+  </div><!-- /#app -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       JAVASCRIPT FILES
+       ═══════════════════════════════════════════════════════ -->
+  <script src="js/data.js?v=2.6"></script>
+  <script src="js/auth.js?v=2.6"></script>
+  <script src="js/sync.js?v=2.6"></script>
+  <script src="js/kiosk.js?v=2.6"></script>
+  <script src="js/swf-data.js?v=2.6"></script>
+  <script src="js/swf-player.js?v=2.6"></script>
+  <script src="js/progress.js?v=2.6"></script>
+  <script src="js/quiz.js?v=2.6"></script>
+  <script src="js/simulation.js?v=2.6"></script>
+  <script src="js/audio.js?v=2.6"></script>
+  <script src="js/vr-workshop.js?v=2.6"></script>
+  <script src="js/books-data.js?v=2.6"></script>
+  <script src="js/books-reader.js?v=2.6"></script>
+  <script src="js/k3-interactive.js?v=2.6"></script>
+  <script src="js/measuring.js?v=2.6"></script>
+  <script src="js/app.js?v=2.6"></script>
+
+</body>
+</html>

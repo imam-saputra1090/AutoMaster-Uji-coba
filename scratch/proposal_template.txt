@@ -1,0 +1,32 @@
+IDENTITAS BAHAN AJAR:
+Judul
+Jenis bahan ajar
+Program keahlian
+Cakupan Materi
+Sasaran pengguna (Fase E)
+[………………………………………………………………………………………...…dst]
+DESKRIPSI UMUM BAHAN AJAR
+(Penjelasan isi, tampilan, fitur, dan lain-lain maksimal 200 kata)
+[……………………………………………………………………………………………dst]
+ALUR INTERAKSI (FLOWCHART): 
+(Gambar alur navigasi antar halaman)
+[…………………………………………………………………………………………dst]
+RENCANA IMPLEMENTASI
+Strategi penggunaan bahan ajar di kelas: Cara guru mengintegrasikan bahan ajar
+(maksimal 1000 kata)
+Estimasi waktu dan tahapan: Jadwal pembuatan dan uji coba
+No.
+Kegiatan
+Minggu
+1
+2
+3
+4
+5
+6
+7
+8
+1
+2
+dst
+STORYBOARD
