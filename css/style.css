@@ -6835,3 +6835,127 @@ body.light-theme .level-card-progress-bar {
   position: relative;
   box-sizing: border-box;
 }
+
+/* ==========================================================================
+   MOBILE RESPONSIVE OVERRIDES FOR BANNER & MEASURING SIMULATOR (v2.7)
+   ========================================================================== */
+@media (max-width: 767px) {
+  /* 1. Fix Banner Slider overlap & clipping */
+  .ranking-banner-container {
+    height: auto !important;
+    min-height: 250px !important;
+    margin: var(--sp-sm) var(--sp-md) !important;
+  }
+  
+  .banner-slide {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important; /* Align to top to prevent top clipping */
+    gap: var(--sp-sm) !important;
+    padding: var(--sp-md) var(--sp-lg) !important;
+  }
+
+  .banner-slide-content {
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .banner-slide-title {
+    font-size: 1.15rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .banner-slide-desc {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .banner-slide-action {
+    margin-top: auto !important; /* Push button to bottom */
+    width: 100% !important;
+  }
+
+  .banner-slide-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 8px 16px !important;
+  }
+
+  /* 2. Fix Measuring Simulator Layout (Sidebar & Workspace side-by-side squish) */
+  .measuring-main-layout {
+    flex-direction: column !important;
+    height: auto !important;
+    overflow: visible !important;
+    gap: 16px !important;
+  }
+
+  .measuring-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding-right: 0 !important;
+  }
+
+  .measuring-info-card {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    flex-grow: 0 !important;
+  }
+
+  .measuring-workspace-column {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .measuring-sim-viewport {
+    height: auto !important;
+    min-height: 420px !important;
+    padding: 15px !important;
+  }
+
+  /* Adjust control panels for mobile */
+  .measuring-control-panel {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 3. Component card image sizing on mobile */
+  .component-img-container {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 6px !important;
+  }
+  .draggable.component-card {
+    gap: 8px !important;
+    padding: 6px 10px !important;
+  }
+}
+
+/* Component Image Styling inside Toolbox */
+.component-img-container {
+  width: 54px;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  background: rgba(7, 11, 23, 0.5);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.1);
+}
+.component-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.draggable.component-card {
+  gap: 12px;
+  align-items: center;
+  padding: 8px 12px;
+}
+
