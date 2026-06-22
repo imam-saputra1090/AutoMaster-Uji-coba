@@ -236,10 +236,21 @@ const SimulationEngine = {
       card.setAttribute('draggable', 'true');
       card.setAttribute('data-component-id', component.id);
 
-      // Tampilan ikon dan nama komponen
-      const icon = component.icon || '🔩';
+      // Tampilan ikon/gambar dan nama komponen
+      let visualContent = '';
+      if (component.image && (component.image.includes('/') || component.image.endsWith('.jpg') || component.image.endsWith('.png'))) {
+        visualContent = `
+          <div class="component-img-container">
+            <img src="${component.image}" class="component-img" alt="${component.name || 'Komponen'}">
+          </div>
+        `;
+      } else {
+        const icon = component.image || component.icon || '🔩';
+        visualContent = `<span class="component-icon">${icon}</span>`;
+      }
+
       card.innerHTML = `
-        <span class="component-icon">${icon}</span>
+        ${visualContent}
         <span class="component-name">${component.name || 'Komponen'}</span>
       `;
 

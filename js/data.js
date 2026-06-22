@@ -130,56 +130,56 @@ const GAME_DATA = {
             name: "Kampas Rem (Brake Pad)",
             description: "Bantalan yang bergesekan langsung dengan cakram/rotor untuk menghentikan putaran roda. Terletak di dalam kaliper, ada 2 buah (dalam dan luar).",
             correctZone: "zone-caliper",
-            image: "🔲"
+            image: "assets/komponen_rem/PAD REM.jpg"
           },
           {
             id: "caliper",
             name: "Kaliper (Caliper)",
             description: "Komponen yang menjepit cakram dengan kampas rem di dalamnya. Berisi piston hidraulis. Terletak mengapit rotor/cakram di setiap roda depan.",
             correctZone: "zone-disc-area",
-            image: "🔧"
+            image: "assets/komponen_rem/CALIPER.jpg"
           },
           {
             id: "rotor-disc",
             name: "Cakram/Piringan (Rotor/Disc)",
             description: "Piringan logam bundar yang berputar bersama roda. Permukaannya halus dan rata sebagai bidang gesekan untuk kampas rem. Terletak di balik velg roda.",
             correctZone: "zone-wheel-hub",
-            image: "💿"
+            image: "assets/komponen_rem/PIRINGAN CAKRAM.jpg"
           },
           {
             id: "master-cylinder",
             name: "Master Silinder (Master Cylinder)",
             description: "Tabung silinder logam yang mengubah tekanan mekanis pedal menjadi tekanan hidraulis. Terletak di ruang mesin, menempel pada brake booster di depan firewall.",
             correctZone: "zone-firewall",
-            image: "🔩"
+            image: "assets/komponen_rem/MASTER REM.jpg"
           },
           {
             id: "brake-booster",
             name: "Penguat Rem (Brake Booster)",
             description: "Komponen bulat besar yang memperbesar tenaga pengereman menggunakan vakum mesin. Terletak di antara pedal rem dan master cylinder, menempel pada firewall.",
             correctZone: "zone-booster-area",
-            image: "⭕"
+            image: "assets/komponen_rem/BOOSTER REM.jpg"
           },
           {
             id: "brake-line",
             name: "Pipa & Selang Rem (Brake Line/Hose)",
             description: "Pipa logam dan selang karet yang menyalurkan minyak rem bertekanan dari master cylinder ke setiap roda. Pipa terletak di sepanjang bodi bawah kendaraan.",
             correctZone: "zone-undercarriage",
-            image: "〰️"
+            image: "assets/komponen_rem/PIPA SELANG REM.jpg"
           },
           {
             id: "wheel-cylinder",
             name: "Silinder Roda (Wheel Cylinder)",
             description: "Silinder kecil yang menerima tekanan hidraulis dan mendorong sepatu rem (brake shoe) ke dinding tromol. Terletak di bagian atas backing plate pada rem tromol roda belakang.",
             correctZone: "zone-drum-area",
-            image: "🔘"
+            image: "assets/komponen_rem/SILINDER RODA.jpg"
           },
           {
             id: "brake-shoe",
             name: "Sepatu Rem (Brake Shoe)",
             description: "Komponen melengkung dengan lapisan kampas yang menekan dinding tromol dari dalam. Terdapat sepasang (leading dan trailing shoe) pada setiap roda belakang.",
             correctZone: "zone-drum-inner",
-            image: "👟"
+            image: "assets/komponen_rem/SEPATU REM TROMOL.jpg"
           }
         ],
         dropZones: [
@@ -464,56 +464,56 @@ const GAME_DATA = {
             name: "Piston",
             description: "Komponen silinder logam yang bergerak naik-turun di dalam silinder. Memiliki ring piston sebagai penyekat. Terletak di dalam lubang silinder pada blok mesin.",
             correctZone: "zone-cylinder-bore",
-            image: "🔵"
+            image: "assets/komponen_mesin/PISTON.jpg"
           },
           {
             id: "connecting-rod",
             name: "Batang Penghubung (Connecting Rod)",
             description: "Batang logam yang menghubungkan piston dengan crankshaft. Mengubah gerak naik-turun menjadi gerak putar. Terletak di antara piston dan crankshaft.",
             correctZone: "zone-connecting",
-            image: "📏"
+            image: "assets/komponen_mesin/BATANG PENGHUBUNG.jpg"
           },
           {
             id: "crankshaft",
             name: "Poros Engkol (Crankshaft)",
             description: "Poros baja berbentuk engkol yang menerima gerak dari connecting rod dan mengubahnya menjadi gerak putar. Terletak di bagian paling bawah blok mesin.",
             correctZone: "zone-bottom-block",
-            image: "⚙️"
+            image: "assets/komponen_mesin/POROS ENGKOL.jpg"
           },
           {
             id: "camshaft",
             name: "Poros Nok (Camshaft)",
             description: "Poros dengan tonjolan (nok) yang menggerakkan katup sesuai timing pembakaran. Terletak di atas kepala silinder (tipe OHC/DOHC) atau di blok mesin (tipe OHV).",
             correctZone: "zone-top-head",
-            image: "🔄"
+            image: "assets/komponen_mesin/POROS NOK.jpg"
           },
           {
             id: "valve-intake",
             name: "Katup Masuk (Intake Valve)",
             description: "Katup berbentuk jamur yang mengatur masuknya campuran udara-bahan bakar ke ruang bakar. Terbuka saat langkah hisap. Terletak di kepala silinder.",
             correctZone: "zone-intake-port",
-            image: "🔽"
+            image: "assets/komponen_mesin/KATUP MASUK.jpg"
           },
           {
             id: "valve-exhaust",
             name: "Katup Buang (Exhaust Valve)",
             description: "Katup yang mengatur keluarnya gas sisa pembakaran. Terbuka saat langkah buang. Terletak di kepala silinder sisi saluran buang.",
             correctZone: "zone-exhaust-port",
-            image: "🔼"
+            image: "assets/komponen_mesin/KATUP BUANG.jpg"
           },
           {
             id: "cylinder-head",
             name: "Kepala Silinder (Cylinder Head)",
             description: "Penutup atas silinder yang membentuk ruang bakar. Tempat katup, saluran masuk/buang, dan busi. Terpasang di atas blok silinder.",
             correctZone: "zone-head-area",
-            image: "🏗️"
+            image: "assets/komponen_mesin/KEPALA SILINDER.jpg"
           },
           {
             id: "spark-plug",
             name: "Busi (Spark Plug)",
             description: "Komponen yang menghasilkan percikan api untuk membakar campuran udara-bahan bakar pada mesin bensin. Terpasang di kepala silinder, ujungnya masuk ke ruang bakar.",
             correctZone: "zone-spark-hole",
-            image: "⚡"
+            image: "assets/komponen_mesin/BUSI.jpg"
           }
         ],
         dropZones: [
@@ -762,56 +762,56 @@ const GAME_DATA = {
             name: "Baterai / Aki (Battery)",
             description: "Sumber energi listrik utama kendaraan, 12V DC. Menyuplai arus ke semua komponen kelistrikan saat mesin mati. Terletak di ruang mesin, biasanya di sudut depan.",
             correctZone: "zone-engine-corner",
-            image: "🔋"
+            image: "assets/komponen_kelistrikan/BATERAI.jpg"
           },
           {
             id: "alternator",
             name: "Alternator",
             description: "Generator listrik yang mengisi baterai dan menyuplai listrik saat mesin hidup. Diputar oleh drive belt dari crankshaft. Terletak di depan mesin.",
             correctZone: "zone-front-engine",
-            image: "🔌"
+            image: "assets/komponen_kelistrikan/ALTERNATOR.jpg"
           },
           {
             id: "starter-motor",
             name: "Motor Starter (Starter Motor)",
             description: "Motor listrik DC yang memutar mesin untuk pertama kali. Memiliki solenoid dan pinion gear. Terletak di bagian bawah mesin, dekat flywheel.",
             correctZone: "zone-lower-engine",
-            image: "🔄"
+            image: "assets/komponen_kelistrikan/MOTOR STARTER.jpg"
           },
           {
             id: "relay",
             name: "Relay",
             description: "Saklar elektromagnetik yang mengontrol aliran arus besar menggunakan arus kecil sebagai pengontrol. Terletak di fuse box / relay box di ruang mesin.",
             correctZone: "zone-fuse-box",
-            image: "🔲"
+            image: "assets/komponen_kelistrikan/RELAY.jpg"
           },
           {
             id: "fuse",
             name: "Sekring (Fuse)",
             description: "Pengaman sirkuit yang akan putus jika arus berlebih, melindungi kabel dan komponen dari kerusakan. Terletak di fuse box (ruang mesin dan dashboard).",
             correctZone: "zone-fuse-box-cabin",
-            image: "⚡"
+            image: "assets/komponen_kelistrikan/SEKERING.jpg"
           },
           {
             id: "body-ground",
             name: "Kabel Body / Ground",
             description: "Kabel tebal yang menghubungkan terminal negatif baterai ke bodi/rangka kendaraan sebagai jalur arus balik (ground/massa). Terhubung ke bodi di dekat baterai.",
             correctZone: "zone-chassis-ground",
-            image: "➖"
+            image: "assets/komponen_kelistrikan/KABEL BODY GROUND.jpg"
           },
           {
             id: "ignition-switch",
             name: "Kunci Kontak (Ignition Switch)",
             description: "Saklar utama yang mengendalikan seluruh sistem kelistrikan kendaraan. Memiliki posisi LOCK, ACC, ON, dan START. Terletak di kolom kemudi.",
             correctZone: "zone-steering-column",
-            image: "🔑"
+            image: "assets/komponen_kelistrikan/KUNCI KONTAK.jpg"
           },
           {
             id: "headlamp",
             name: "Lampu Utama (Headlamp)",
             description: "Lampu depan untuk penerangan jalan, memiliki mode high beam dan low beam. Terletak di bagian depan kendaraan, kiri dan kanan.",
             correctZone: "zone-front-body",
-            image: "💡"
+            image: "assets/komponen_kelistrikan/LAMPU UTAMA.jpg"
           }
         ],
         dropZones: [
@@ -1330,56 +1330,56 @@ const GAME_DATA = {
             name: "Tangki Bahan Bakar (Fuel Tank)",
             description: "Wadah penyimpan BBM, kapasitas 40-65 liter. Terletak di bagian bawah belakang kendaraan, di bawah lantai jok belakang atau bagasi.",
             correctZone: "zone-rear-under",
-            image: "⛽"
+            image: "assets/komponen_bbm_pendingin/TANGKI BAHAN BAKAR.jpg"
           },
           {
             id: "fuel-pump",
             name: "Pompa Bahan Bakar (Fuel Pump)",
             description: "Pompa listrik yang memompa BBM dari tangki ke mesin dengan tekanan 2,5-4 bar. Pada sistem EFI, terletak di dalam tangki (in-tank type).",
             correctZone: "zone-in-tank",
-            image: "🔌"
+            image: "assets/komponen_bbm_pendingin/POMPA BAHAN BAKAR.jpg"
           },
           {
             id: "fuel-filter",
             name: "Saringan BBM (Fuel Filter)",
             description: "Menyaring kotoran dan partikel dari BBM sebelum masuk ke injector. Terletak di antara tangki BBM dan mesin, biasanya di bawah kendaraan atau di ruang mesin.",
             correctZone: "zone-fuel-line-mid",
-            image: "🔲"
+            image: "assets/komponen_bbm_pendingin/FILTER BAHAN BAKAR.jpg"
           },
           {
             id: "injector",
             name: "Injektor (Fuel Injector)",
             description: "Katup elektromagnetik yang menyemprotkan BBM dalam bentuk kabut halus ke saluran masuk atau ruang bakar. Terletak di intake manifold dekat kepala silinder.",
             correctZone: "zone-intake-manifold",
-            image: "💉"
+            image: "assets/komponen_bbm_pendingin/INJEKTOR.jpg"
           },
           {
             id: "radiator",
             name: "Radiator",
             description: "Mendinginkan coolant yang telah menyerap panas dari mesin. Coolant panas mengalir melalui inti radiator dan didinginkan oleh udara. Terletak di paling depan kendaraan.",
             correctZone: "zone-front-grille",
-            image: "🌡️"
+            image: "assets/komponen_bbm_pendingin/RADIATOR.jpg"
           },
           {
             id: "thermostat",
             name: "Termostat (Thermostat)",
             description: "Katup otomatis yang mengatur aliran coolant berdasarkan suhu. Tertutup saat dingin, terbuka saat suhu ±80-90°C. Terletak pada housing di kepala silinder.",
             correctZone: "zone-engine-top",
-            image: "🌡️"
+            image: "assets/komponen_bbm_pendingin/THERMOSTAT.jpg"
           },
           {
             id: "water-pump",
             name: "Pompa Air (Water Pump)",
             description: "Memompa dan mensirkulasikan coolant melalui water jacket di mesin dan radiator. Terletak di depan mesin, digerakkan oleh timing belt atau drive belt.",
             correctZone: "zone-engine-front",
-            image: "🔄"
+            image: "assets/komponen_bbm_pendingin/POMPA AIR RADIATOR.jpg"
           },
           {
             id: "fan-belt",
             name: "Fan Belt / Drive Belt",
             description: "Sabuk karet yang menghubungkan puli crankshaft ke alternator, water pump, kompresor AC, dan pompa power steering. Terletak di bagian depan mesin.",
             correctZone: "zone-belt-area",
-            image: "➰"
+            image: "assets/komponen_bbm_pendingin/DRIVE BELT.jpg"
           }
         ],
         dropZones: [
