@@ -19,15 +19,15 @@
  *   GET  /getStudents   - Get all students (teacher mode)
  * 
  * SHEETS:
- *   "users"    : NIS | Nama | Kelas | WA | PasswordHash | RegisteredAt
- *   "scores"   : NIS | Nama | Level | Phase | Score | Stars | XP | Timestamp
- *   "sessions" : NIS | LoginTime | Device | UserAgent
+ *   "users"    : Username | Nama | RegisteredAt
+ *   "scores"   : Username | Nama | Level | Phase | Score | Stars | XP | Timestamp
+ *   "sessions" : Username | LoginTime | Device | UserAgent
  * ============================================================
  */
 
 // ===================== CONFIGURATION =====================
 
-var TEACHER_SECRET = "AutoMaster2024!Guru";  // Change this to your own secret key
+var TEACHER_SECRET = "user123";  // Change this to your own secret key
 var SPREADSHEET_ID = "";  // Leave empty to use the bound spreadsheet, or set a specific ID
 var MAX_LEADERBOARD = 20; // Max entries per leaderboard query
 var SESSION_TOKEN_LENGTH = 32;
@@ -47,7 +47,7 @@ function SETUP() {
     usersSheet = ss.insertSheet("users");
     Logger.log("Created sheet: users");
   }
-  var usersHeaders = ["NIS", "Nama", "Kelas", "WA", "PasswordHash", "RegisteredAt"];
+  var usersHeaders = ["Username", "Nama", "RegisteredAt"];
   usersSheet.getRange(1, 1, 1, usersHeaders.length).setValues([usersHeaders]);
   usersSheet.getRange(1, 1, 1, usersHeaders.length)
     .setFontWeight("bold")
@@ -55,7 +55,7 @@ function SETUP() {
     .setFontColor("#ffffff");
   usersSheet.setFrozenRows(1);
   // Set column widths
-  usersSheet.setColumnWidth(1, 120); // NIS
+  usersSheet.setColumnWidth(1, 150); // Username
   usersSheet.setColumnWidth(2, 200); // Nama
   usersSheet.setColumnWidth(3, 100); // Kelas
   usersSheet.setColumnWidth(4, 150); // WA
@@ -68,7 +68,7 @@ function SETUP() {
     scoresSheet = ss.insertSheet("scores");
     Logger.log("Created sheet: scores");
   }
-  var scoresHeaders = ["NIS", "Nama", "Level", "Phase", "Score", "Stars", "XP", "Timestamp"];
+  var scoresHeaders = ["Username", "Nama", "Level", "Phase", "Score", "Stars", "XP", "Timestamp"];
   scoresSheet.getRange(1, 1, 1, scoresHeaders.length).setValues([scoresHeaders]);
   scoresSheet.getRange(1, 1, 1, scoresHeaders.length)
     .setFontWeight("bold")
@@ -90,7 +90,7 @@ function SETUP() {
     sessionsSheet = ss.insertSheet("sessions");
     Logger.log("Created sheet: sessions");
   }
-  var sessionsHeaders = ["NIS", "LoginTime", "Device", "UserAgent"];
+  var sessionsHeaders = ["Username", "LoginTime", "Device", "UserAgent"];
   sessionsSheet.getRange(1, 1, 1, sessionsHeaders.length).setValues([sessionsHeaders]);
   sessionsSheet.getRange(1, 1, 1, sessionsHeaders.length)
     .setFontWeight("bold")
@@ -212,15 +212,14 @@ function handleRegister_(body) {
   var nama     = sanitize_(body.nama);
   var kelas    = sanitize_(body.kelas);
   var wa       = sanitize_(body.wa);
-  var password = body.password || "";
   
   // --- Validation ---
-  if (!nis || !nama || !kelas || !wa || !password) {
-    return makeResponse_(false, "Semua field wajib diisi: nis, nama, kelas, wa, password", null);
+  if (!nis || !nama || !kelas || !wa) {
+    return makeResponse_(false, "Semua field wajib diisi: Username, Nama Lengkap, Kelas, WhatsApp", null);
   }
   
-  if (!/^\d{4,20}$/.test(nis)) {
-    return makeResponse_(false, "NIS harus berupa angka (4-20 digit)", null);
+  if (nis.length < 2 || nis.length > 100) {
+    return makeResponse_(false, "Username harus 2-100 karakter", null);
   }
   
   if (nama.length < 2 || nama.length > 100) {
@@ -235,20 +234,15 @@ function handleRegister_(body) {
     return makeResponse_(false, "Nomor WA harus diawali 08 dan berisi 10-15 digit", null);
   }
   
-  if (password.length < 4) {
-    return makeResponse_(false, "Password minimal 4 karakter", null);
-  }
-  
   // --- Check duplicate NIS ---
   var usersSheet = getSheet_("users");
   var existingUser = findUserByNIS_(usersSheet, nis);
   
   if (existingUser) {
-    return makeResponse_(false, "NIS " + nis + " sudah terdaftar", null);
+    return makeResponse_(false, "Username " + nis + " sudah terdaftar", null);
   }
   
-  // --- Hash password and save ---
-  var passwordHash = hashSHA256_(password);
+  var passwordHash = "";
   var registeredAt = formatDateTime_(new Date());
   
   usersSheet.appendRow([nis, nama, kelas, wa, passwordHash, registeredAt]);
@@ -270,17 +264,16 @@ function handleRegister_(body) {
  */
 function handleLogin_(body) {
   var nis      = sanitize_(body.nis);
-  var password = body.password || "";
   var device   = sanitize_(body.device || "Unknown");
   var userAgent = sanitize_(body.userAgent || "Unknown");
   
   // --- Validation ---
-  if (!nis || !password) {
-    return makeResponse_(false, "NIS dan password wajib diisi", null);
+  if (!nis) {
+    return makeResponse_(false, "Nama pengguna wajib diisi", null);
   }
   
-  if (!/^\d{4,20}$/.test(nis)) {
-    return makeResponse_(false, "NIS harus berupa angka", null);
+  if (nis.length < 2 || nis.length > 100) {
+    return makeResponse_(false, "Nama pengguna tidak valid", null);
   }
   
   // --- Find user ---
@@ -288,38 +281,7 @@ function handleLogin_(body) {
   var user = findUserByNIS_(usersSheet, nis);
   
   if (!user) {
-    return makeResponse_(false, "NIS tidak ditemukan. Silakan registrasi terlebih dahulu", null);
-  }
-  
-  // --- Verify password ---
-  var passwordHash = hashSHA256_(password);
-  var storedPassword = user.passwordHash;
-  
-  // A SHA-256 hash is exactly 64 characters long and contains only hex chars
-  var isHash = /^[0-9a-f]{64}$/i.test(storedPassword);
-  var passwordCorrect = false;
-  
-  if (isHash) {
-    passwordCorrect = (storedPassword === passwordHash);
-  } else {
-    // If teacher set a plain password in spreadsheet
-    passwordCorrect = (storedPassword === password);
-    
-    // Auto-hash the plain password and save it back to protect it!
-    if (passwordCorrect) {
-      var data = usersSheet.getDataRange().getValues();
-      var nisStr = parseNis_(nis);
-      for (var i = 1; i < data.length; i++) {
-        if (parseNis_(data[i][0]) === nisStr) {
-          usersSheet.getRange(i + 1, 5).setValue(passwordHash); // Column 5 is PasswordHash (E)
-          break;
-        }
-      }
-    }
-  }
-  
-  if (!passwordCorrect) {
-    return makeResponse_(false, "Password salah", null);
+    return makeResponse_(false, "Nama pengguna tidak ditemukan. Silakan registrasi terlebih dahulu", null);
   }
   
   // --- Generate session token ---
@@ -362,8 +324,8 @@ function handleSyncProgress_(body) {
     return makeResponse_(false, "NIS dan level wajib diisi", null);
   }
   
-  if (!/^\d{4,20}$/.test(nis)) {
-    return makeResponse_(false, "NIS tidak valid", null);
+  if (nis.length < 2 || nis.length > 100) {
+    return makeResponse_(false, "Nama pengguna / NIS tidak valid", null);
   }
   
   if (isNaN(score) || score < 0) {
@@ -891,11 +853,7 @@ function parseLevel_(val) {
  */
 function parseNis_(val) {
   if (val === null || val === undefined) return "";
-  var str = String(val).trim();
-  if (str.indexOf('.') !== -1) {
-    str = str.split('.')[0];
-  }
-  return str.replace(/\D/g, "");
+  return String(val).trim().toLowerCase();
 }
 
 /**
