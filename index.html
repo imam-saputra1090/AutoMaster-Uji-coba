@@ -111,14 +111,11 @@
           <!-- FORM LOGIN SISWA -->
           <form id="form-login" onsubmit="event.preventDefault();">
             <div class="auth-form-group">
-              <label for="login-nis">NIS (Nomor Induk Siswa)</label>
-              <input type="text" id="login-nis" placeholder="Masukkan NIS Anda" required autocomplete="username">
+              <label for="login-nis">Nama Pengguna (Username)</label>
+              <input type="text" id="login-nis" placeholder="Masukkan Nama Pengguna Anda" required autocomplete="username">
             </div>
             
-            <div class="auth-form-group">
-              <label for="login-password">Password</label>
-              <input type="password" id="login-password" placeholder="Masukkan Password" required autocomplete="current-password" value="user123">
-            </div>
+            
             
             <div class="auth-btn-container">
               <button type="submit" id="btn-login-submit" class="btn btn-primary btn-lg" style="width: 100%; margin-bottom: 10px;">Masuk Siswa 🚀</button>
@@ -143,7 +140,6 @@
             <span id="teacher-reg-info" style="display: none; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; text-align: center;">
               🔑 <strong>Aktivasi Akun Guru?</strong> Guru tidak perlu mendaftar. Gunakan Password Rahasia yang diatur di Apps Script Anda. Hubungi Administrator (WA: 085664236522) jika Anda memerlukan bantuan setup database.<br>
             </span>
-            <a id="link-forgot-password" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--text-muted); cursor: pointer; text-decoration: underline;">Lupa Password? 🔑</a><br>
             <a id="link-to-teacher-login" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--clr-secondary); cursor: pointer; text-decoration: underline; font-weight: 500;">Masuk sebagai Guru 🧑‍🏫</a><br>
             <a id="link-to-landing-from-login" style="font-size: 0.82rem; margin-top: 10px; display: inline-block; color: var(--text-muted); cursor: pointer; text-decoration: underline; font-weight: 500;">← Kembali ke Panduan / Landing</a>
           </p>
@@ -188,8 +184,8 @@
           
           <form id="form-register" onsubmit="event.preventDefault();">
             <div class="auth-form-group">
-              <label for="register-nis">NIS (Nomor Induk Siswa)</label>
-              <input type="text" id="register-nis" placeholder="Contoh: 12345 (4-10 digit)" required>
+              <label for="register-nis">Nama Pengguna (Username)</label>
+              <input type="text" id="register-nis" placeholder="Contoh: budisantoso (minimal 3 karakter)" required>
             </div>
             
             <div class="auth-form-group">
@@ -215,10 +211,7 @@
               <input type="text" id="register-wa" placeholder="Contoh: 081234567890" required>
             </div>
             
-            <div class="auth-form-group">
-              <label for="register-password">Password</label>
-              <input type="password" id="register-password" placeholder="Minimal 6 karakter" required autocomplete="new-password" value="user123">
-            </div>
+            
             
             <div class="auth-btn-container">
               <button type="submit" id="btn-register-submit" class="btn btn-primary btn-lg">Daftar 🚀</button>
@@ -1704,8 +1697,8 @@
             <table class="teacher-table" style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
               <thead>
                 <tr style="background: rgba(255,255,255,0.05); border-bottom: 2px solid rgba(255,255,255,0.1); color: var(--clr-primary); font-weight: 600;">
-                  <th style="padding: 12px 8px;">Nama</th>
-                  <th style="padding: 12px 8px;">NIS</th>
+                  <th style="padding: 12px 8px;">Nama Lengkap</th>
+                  <th style="padding: 12px 8px;">Username</th>
                   <th style="padding: 12px 8px;">Kelas</th>
                   <th style="padding: 12px 8px;">WhatsApp</th>
                   <th style="padding: 12px 8px; text-align: center;">Skor</th>
