@@ -1,51 +1,30 @@
-import zipfile
-import xml.etree.ElementTree as ET
-import os
+import sys
+import docx
 
-def read_docx(file_path):
-    if not os.path.exists(file_path):
-        return f"File not found: {file_path}"
-    
+sys.stdout.reconfigure(encoding='utf-8')
+
+def inspect_docx(filename):
+    print(f"=== {filename} ===")
     try:
-        with zipfile.ZipFile(file_path) as z:
-            xml_content = z.read("word/document.xml")
-            
-        root = ET.fromstring(xml_content)
-        
-        # Docx XML namespaces
-        ns = {
-            'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-        }
-        
-        paragraphs = []
-        for p in root.findall('.//w:p', ns):
-            texts = []
-            for t in p.findall('.//w:t', ns):
-                if t.text:
-                    texts.append(t.text)
-            if texts:
-                paragraphs.append("".join(texts))
-        
-        return "\n".join(paragraphs)
+        doc = docx.Document(filename)
     except Exception as e:
-        return f"Error reading {file_path}: {e}"
+        print(f"Failed to open {filename}: {e}")
+        return
+    
+    # Check paragraphs
+    for i, para in enumerate(doc.paragraphs):
+        if any(w in para.text.lower() for w in ["password", "sandi", "nis"]):
+            print(f"P[{i}]: {para.text}")
+            
+    # Check tables
+    for t_idx, table in enumerate(doc.tables):
+        for r_idx, row in enumerate(table.rows):
+            for c_idx, cell in enumerate(row.cells):
+                if any(w in cell.text.lower() for w in ["password", "sandi", "nis"]):
+                    # Deduplicate printing the same text multiple times because merged cells are returned multiple times
+                    print(f"T[{t_idx}] R[{r_idx}] C[{c_idx}]: {cell.text.strip().replace('\n', ' ')}")
 
-# Paths
-proposal_path = r"C:\Users\MyBook Hype\Downloads\[Template] Proposal Sayembara Pembuatan Bahan Ajar Digital Jenjang SMK.docx"
-storyboard_path = r"C:\Users\MyBook Hype\Downloads\[Template] Storyboard Sayembara Pembuatan Bahan Ajar Digital Jenjang SMK.docx"
-
-print("--- PROPOSAL TEMPLATE ---")
-proposal_text = read_docx(proposal_path)
-print(proposal_text[:3000]) # Print first 3000 chars
-
-print("\n\n--- STORYBOARD TEMPLATE ---")
-storyboard_text = read_docx(storyboard_path)
-print(storyboard_text[:3000]) # Print first 3000 chars
-
-# Save to scratch folder for full viewing
-os.makedirs(r"c:\Users\MyBook Hype\OneDrive\Documents\AGEN INFODESK 234\GIM\scratch", exist_ok=True)
-with open(r"c:\Users\MyBook Hype\OneDrive\Documents\AGEN INFODESK 234\GIM\scratch\proposal_template.txt", "w", encoding="utf-8") as f:
-    f.write(proposal_text)
-with open(r"c:\Users\MyBook Hype\OneDrive\Documents\AGEN INFODESK 234\GIM\scratch\storyboard_template.txt", "w", encoding="utf-8") as f:
-    f.write(storyboard_text)
-print("Saved templates to scratch folder.")
+inspect_docx("GIM/Storyboard Sayembara Pembuatan Bahan Ajar Digital - AutoMaster.docx")
+inspect_docx("GIM/Proposal Sayembara Pembuatan Bahan Ajar Digital - AutoMaster.docx")
+inspect_docx("GIM/proposal_sayembara.doc")
+inspect_docx("GIM/proposal_dan_storyboard_sayembara.md")

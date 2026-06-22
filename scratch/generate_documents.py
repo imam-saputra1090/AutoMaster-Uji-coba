@@ -100,9 +100,18 @@ def fill_proposal():
             row.cells[col_idx].width = Inches(0.35)
 
     # Save documents
-    doc.save(proposal_output)
-    doc.save(proposal_output_workspace)
-    print("Filled Proposal saved successfully.")
+    try:
+        doc.save(proposal_output)
+        print(f"Proposal berhasil disimpan di Downloads: {proposal_output}")
+    except PermissionError:
+        print(f"PERINGATAN: Gagal menyimpan Proposal ke Downloads ({proposal_output}). Pastikan file tidak sedang terbuka di Microsoft Word.")
+        
+    try:
+        doc.save(proposal_output_workspace)
+        print(f"Proposal berhasil disimpan di Workspace: {proposal_output_workspace}")
+    except PermissionError:
+        print(f"PERINGATAN: Gagal menyimpan Proposal ke Workspace ({proposal_output_workspace}). Pastikan file tidak sedang terbuka di Microsoft Word.")
+
 
 def fill_storyboard():
     storyboard_template = r"C:\Users\MyBook Hype\Downloads\[Template] Storyboard Sayembara Pembuatan Bahan Ajar Digital Jenjang SMK.docx"
@@ -144,13 +153,13 @@ def fill_storyboard():
         # Scene 2
         {
             "scene": "Scene 02 — Registrasi & Login Mandiri Siswa",
-            "treatment": "Form pendaftaran atau login bagi siswa menggunakan NIS. Bidang password secara default terisi 'user123' untuk mempercepat pendaftaran massal siswa di laboratorium.",
+            "treatment": "Form pendaftaran atau login bagi siswa menggunakan Nama Pengguna (Username). Sistem dirancang bebas password untuk mempermudah pendaftaran massal siswa secara instan di laboratorium.",
             "visual": (
                 "1. Kotak form glassmorphic semitransparan dengan border neon cyan tipis.\n"
-                "2. Bidang input teks (Nama, NIS, WA), dropdown pilihan kelas (X TKR 1, 2, 3), dan input password (terisi bintang/dots).\n"
+                "2. Bidang input teks (Nama Lengkap, Username, WhatsApp), dan dropdown pilihan kelas (X TKR 1, 2, 3).\n"
                 "3. Tombol 'Daftar 🚀' dan tautan 'Masuk sebagai Guru'."
             ),
-            "narasi": "Daftarkan Akun Siswa Baru. Cukup masukkan NIS, Nama, dan Kelas Anda untuk mulai mengumpulkan poin prestasi!",
+            "narasi": "Daftarkan Akun Siswa Baru. Cukup masukkan Nama Pengguna (Username), Nama Lengkap, dan Kelas Anda untuk mulai bermain!",
             "sfx": "keypress.wav (ketikan keyboard), login_success.wav (sukses login)",
             "musik": "techno_synth_ambient.mp3 (volume diturunkan menjadi 20%)",
             "ambience": "Hening / dengung background tipis",
@@ -257,9 +266,18 @@ def fill_storyboard():
         fill_table_data(new_table, scenes_data[i])
         
     # Save documents
-    doc.save(storyboard_output)
-    doc.save(storyboard_output_workspace)
-    print("Filled Storyboard saved successfully.")
+    try:
+        doc.save(storyboard_output)
+        print(f"Storyboard berhasil disimpan di Downloads: {storyboard_output}")
+    except PermissionError:
+        print(f"PERINGATAN: Gagal menyimpan Storyboard ke Downloads ({storyboard_output}). Pastikan file tidak sedang terbuka di Microsoft Word.")
+        
+    try:
+        doc.save(storyboard_output_workspace)
+        print(f"Storyboard berhasil disimpan di Workspace: {storyboard_output_workspace}")
+    except PermissionError:
+        print(f"PERINGATAN: Gagal menyimpan Storyboard ke Workspace ({storyboard_output_workspace}). Pastikan file tidak sedang terbuka di Microsoft Word.")
+
 
 if __name__ == "__main__":
     fill_proposal()
