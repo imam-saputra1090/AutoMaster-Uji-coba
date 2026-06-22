@@ -5990,19 +5990,29 @@ body.light-theme .level-card-progress-bar {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #030712 url('../assets/workshop.jpg') no-repeat center center;
-  background-size: cover;
+  background: #020617 !important;
   overflow: hidden;
   display: none;
-  align-items: center;
-  justify-content: center;
 }
 
 #screen-vr.active {
-  display: flex;
+  display: block;
 }
 
-#screen-vr::before {
+#vr-scene {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 125vw;
+  height: 100vh;
+  background: url('../assets/workshop.jpg') no-repeat center center;
+  background-size: cover;
+  z-index: 1;
+  transform-origin: center center;
+  transition: transform 0.15s ease-out;
+}
+
+#vr-scene::before {
   content: '';
   position: absolute;
   top: 0;
@@ -6011,7 +6021,7 @@ body.light-theme .level-card-progress-bar {
   bottom: 0;
   background: rgba(0, 0, 0, 0.35); /* Redupkan sedikit agar hotspot terlihat jelas */
   pointer-events: none;
-  z-index: 1;
+  z-index: 2;
 }
 
 #vr-hotspots-container {
@@ -6020,8 +6030,14 @@ body.light-theme .level-card-progress-bar {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: 5;
   pointer-events: auto;
+}
+
+@media (max-width: 767px) {
+  #vr-scene {
+    width: 250vw;
+  }
 }
 
 /* Hotspot Pin */
