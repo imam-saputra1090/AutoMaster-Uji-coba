@@ -1161,7 +1161,7 @@ start "" "${folderPath}\\\\index.html"
     bannerEl.innerHTML = `
       <div class="banner-slides-container">
         ${slides.map((slide, i) => `
-          <div class="banner-slide ${i === 0 ? 'active' : ''}" style="background-image: linear-gradient(90deg, rgba(10, 15, 30, 0.95) 0%, rgba(10, 15, 30, 0.7) 45%, rgba(10, 15, 30, 0.3) 70%, rgba(10, 15, 30, 0.9) 100%), url('${slide.image}');" data-index="${i}">
+          <div class="banner-slide ${i === 0 ? 'active' : ''}" style="--slide-bg: url('${slide.image}');" data-index="${i}">
             <div class="banner-slide-content">
               <div class="banner-slide-badge">TUJUAN PEMBELAJARAN</div>
               <h3 class="banner-slide-title">${slide.title}</h3>

@@ -83,13 +83,39 @@ const VrWorkshop = {
 
     container.innerHTML = '';
     this.hotspots.forEach(hs => {
+      // Determine if locked
+      let isUnlocked = true;
+      let reqLevelId = 1;
+      
+      if (hs.id === 'rem') {
+        reqLevelId = 1;
+        isUnlocked = typeof ProgressManager !== 'undefined' ? ProgressManager.isLevelUnlocked(1) : true;
+      } else if (hs.id === 'listrik') {
+        reqLevelId = 3;
+        isUnlocked = typeof ProgressManager !== 'undefined' ? ProgressManager.isLevelUnlocked(3) : false;
+      } else if (hs.id === 'mesin') {
+        reqLevelId = 4;
+        isUnlocked = typeof ProgressManager !== 'undefined' ? ProgressManager.isLevelUnlocked(4) : false;
+      } else if (hs.id === 'k3') {
+        reqLevelId = 1;
+        isUnlocked = true; // K3 is always available
+      }
+
       const pin = document.createElement('button');
       pin.className = 'vr-hotspot-pin';
+      if (!isUnlocked) {
+        pin.classList.add('locked');
+      }
       pin.style.left = `${hs.left}%`;
       pin.style.top = `${hs.top}%`;
       pin.setAttribute('data-id', hs.id);
-      pin.setAttribute('aria-label', hs.name);
-      pin.innerHTML = '<span class="pin-pulse"></span><span class="pin-icon">📍</span>';
+      pin.setAttribute('aria-label', hs.name + (isUnlocked ? '' : ' (Terkunci)'));
+      
+      if (isUnlocked) {
+        pin.innerHTML = '<span class="pin-pulse"></span><span class="pin-icon">📍</span>';
+      } else {
+        pin.innerHTML = '<span class="pin-icon">🔒</span>';
+      }
 
       const tooltip = document.createElement('div');
       tooltip.className = 'vr-hotspot-tooltip';
@@ -98,11 +124,20 @@ const VrWorkshop = {
       } else if (hs.left > 75) {
         tooltip.classList.add('tooltip-right');
       }
-      tooltip.innerHTML = `
-        <div class="tooltip-title">${hs.name}</div>
-        <div class="tooltip-desc">${hs.description}</div>
-        <div class="tooltip-footer">Klik untuk Memulai 🏁</div>
-      `;
+      
+      if (isUnlocked) {
+        tooltip.innerHTML = `
+          <div class="tooltip-title">${hs.name}</div>
+          <div class="tooltip-desc">${hs.description}</div>
+          <div class="tooltip-footer">Klik untuk Memulai 🏁</div>
+        `;
+      } else {
+        tooltip.innerHTML = `
+          <div class="tooltip-title" style="color: #ef4444; font-weight: 800;">🔒 ${hs.name} (Terkunci)</div>
+          <div class="tooltip-desc" style="color: #94a3b8; font-size: 11px; line-height: 1.5; margin-bottom: 10px;">Selesaikan level sebelumnya di Mode Petualangan untuk membuka stasiun ini!</div>
+          <div class="tooltip-footer" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border-radius: 6px; padding: 4px 8px; font-weight: 700; font-size: 10px; display: inline-block;">Level ${reqLevelId} Belum Dibuka</div>
+        `;
+      }
       pin.appendChild(tooltip);
 
       container.appendChild(pin);
@@ -120,6 +155,12 @@ const VrWorkshop = {
     container.addEventListener('click', (e) => {
       const pin = e.target.closest('.vr-hotspot-pin');
       if (pin) {
+        if (pin.classList.contains('locked')) {
+          if (typeof App !== 'undefined') {
+            App.showToast('🔒 Stasiun ini masih terkunci! Selesaikan level sebelumnya di Peta Petualangan.', 'warning');
+          }
+          return;
+        }
         const id = pin.getAttribute('data-id');
         const hs = this.hotspots.find(h => h.id === id);
         if (hs && typeof hs.action === 'function') {
@@ -217,6 +258,9 @@ const VrWorkshop = {
   activate() {
     this.isActive = true;
     console.log('[VR] Bengkel Virtual diaktifkan.');
+
+    // Rebuild DOM to check for updated level progress
+    this._createDom();
 
     // Centering and intro zoom effect
     const scene = document.getElementById('vr-scene');
