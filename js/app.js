@@ -56,6 +56,11 @@ const App = {
       // Jalankan deteksi lingkungan CORS
       this.checkEnvironment();
 
+      // Inisialisasi sistem progres terlebih dahulu agar modul lain dapat membaca status progres
+      if (typeof ProgressManager !== 'undefined' && typeof ProgressManager.init === 'function') {
+        ProgressManager.init();
+      }
+
       // Cek dan terapkan tema tampilan (Dipaksa selalu gelap/dark demi estetika neon cyberpunk)
       try {
         localStorage.setItem('automaster_theme', 'dark');
@@ -126,11 +131,6 @@ const App = {
 
       if (typeof MeasuringTools !== 'undefined' && typeof MeasuringTools.init === 'function') {
         MeasuringTools.init();
-      }
-
-      // Inisialisasi sistem progres
-      if (typeof ProgressManager !== 'undefined' && typeof ProgressManager.init === 'function') {
-        ProgressManager.init();
       }
 
       // Setup network status indicators (online/offline dot)
@@ -1141,28 +1141,28 @@ start "" "${folderPath}\\\\index.html"
     // 4 learning objectives mapped to neon futuristic image assets
     const slides = [
       {
-        image: "assets/banner_objective4.png",
+        image: "../assets/banner_objective4.png",
         title: "Tujuan 1: Prosedur K3 & Budaya 5R",
         desc: "Menerapkan K3, penggunaan APD wajib, dan budaya 5R untuk keselamatan kerja di bengkel otomotif.",
         btnText: "Mulai Belajar 🛡️",
         btnAction: () => this.showScreen('map')
       },
       {
-        image: "assets/banner_objective2.png",
+        image: "../assets/banner_objective2.png",
         title: "Tujuan 2: Klasifikasi & Penggunaan Hand Tools",
         desc: "Mengidentifikasi dan menggunakan berbagai jenis kunci, tang, obeng, dan peralatan kerja bengkel secara tepat.",
         btnText: "Pelajari Peralatan 🛠️",
         btnAction: () => this.showScreen('map')
       },
       {
-        image: "assets/banner_objective3.png",
+        image: "../assets/banner_objective3.png",
         title: "Tujuan 3: Pengukuran Presisi Alat Ukur Dasar",
         desc: "Menggunakan dan membaca jangka sorong, mikrometer luar, dial gauge, dan multimeter untuk diagnosis presisi.",
         btnText: "Pelajari Alat Ukur 📐",
         btnAction: () => this.showScreen('map')
       },
       {
-        image: "assets/banner_objective1.png",
+        image: "../assets/banner_objective1.png",
         title: "Tujuan 4: Prinsip Kerja Motor & Kelistrikan",
         desc: "Memahami siklus 4-langkah mesin bensin/diesel serta dasar-dasar sistem kelistrikan & pengapian kendaraan.",
         btnText: "Pelajari Mesin TKR 🚗",

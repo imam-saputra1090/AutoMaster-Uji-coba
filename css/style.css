@@ -4750,18 +4750,6 @@ body.light-theme .welcome-step-card:hover {
   width: 100%;
 }
 
-@media (min-width: 768px) {
-  .welcome-competence-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .welcome-competence-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-}
-
 .welcome-action-box {
   margin-top: var(--sp-2xl);
   margin-bottom: var(--sp-xl);
@@ -6102,7 +6090,7 @@ body.light-theme .level-card-progress-bar {
   left: 0;
   width: 125vw;
   height: 100vh;
-  background: url('../assets/workshop.jpg') no-repeat center center;
+  background: url('../assets/workshop_panorama.png') no-repeat center center;
   background-size: cover;
   z-index: 1;
   transform-origin: center center;

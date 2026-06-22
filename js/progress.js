@@ -109,7 +109,7 @@ const ProgressManager = {
 
   /** Mengambil salinan data pemain saat ini */
   getPlayerData() {
-    return this._data;
+    return this._data || JSON.parse(JSON.stringify(this.defaultData));
   },
 
   /** Mengatur nama pemain */
@@ -392,7 +392,10 @@ const ProgressManager = {
    * @returns {boolean}
    */
   isLevelUnlocked(levelId) {
-    const lvl = this._data.levels[levelId];
+    if (levelId === 1) return true; // Level 1 selalu terbuka
+    const data = this._data || this.defaultData;
+    if (!data || !data.levels) return false;
+    const lvl = data.levels[levelId];
     return lvl ? lvl.unlocked : false;
   },
 
@@ -402,8 +405,10 @@ const ProgressManager = {
    * @returns {boolean}
    */
   isLevel6Unlockable() {
+    const data = this._data || this.defaultData;
+    if (!data || !data.levels) return false;
     for (let i = 1; i <= 5; i++) {
-      const lvl = this._data.levels[i];
+      const lvl = data.levels[i];
       if (!lvl || lvl.stars < 1) return false;
     }
     return true;
