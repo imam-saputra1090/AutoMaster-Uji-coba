@@ -8,7 +8,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 
 PORT = 8000
-TEACHER_SECRET = "AutoMaster2024!Guru"
+TEACHER_SECRET = "user123"
 DB_FILE = "automaster.db"
 
 def init_db():
@@ -352,10 +352,9 @@ class LocalServerHandler(SimpleHTTPRequestHandler):
         nama = data.get('nama', '').strip()
         kelas = data.get('kelas', '').strip()
         wa = data.get('wa', '').strip()
-        password = data.get('password', '').strip()
 
-        if not (nis and nama and kelas and password):
-            self.send_json_response(200, {"success": False, "message": "Parameter NIS, Nama, Kelas, dan Password wajib diisi."})
+        if not (nis and nama and kelas and wa):
+            self.send_json_response(200, {"success": False, "message": "Parameter Username, Nama, Kelas, dan WA wajib diisi."})
             return
 
         conn = sqlite3.connect(DB_FILE)
@@ -365,11 +364,11 @@ class LocalServerHandler(SimpleHTTPRequestHandler):
         cursor.execute("SELECT nis FROM users WHERE nis = ?", (nis,))
         if cursor.fetchone():
             conn.close()
-            self.send_json_response(200, {"success": False, "message": "NIS sudah terdaftar! Gunakan NIS lain."})
+            self.send_json_response(200, {"success": False, "message": "Username sudah terdaftar! Gunakan nama lain."})
             return
 
         # Insert user
-        password_hash = hash_sha256(password)
+        password_hash = ""
         registered_at = datetime.now().isoformat()
         try:
             cursor.execute(
@@ -388,20 +387,18 @@ class LocalServerHandler(SimpleHTTPRequestHandler):
 
     def api_post_login(self, data):
         nis = data.get('nis', '').strip()
-        password = data.get('password', '').strip()
         device = data.get('device', 'Desktop').strip()
         user_agent = data.get('userAgent', '').strip()
 
-        if not (nis and password):
-            self.send_json_response(200, {"success": False, "message": "Parameter NIS dan Password wajib diisi."})
+        if not nis:
+            self.send_json_response(200, {"success": False, "message": "Username wajib diisi."})
             return
 
         conn = sqlite3.connect(DB_FILE)
         cursor = conn.cursor()
 
         # Check user
-        password_hash = hash_sha256(password)
-        cursor.execute("SELECT nis, nama, kelas FROM users WHERE nis = ? AND password_hash = ?", (nis, password_hash))
+        cursor.execute("SELECT nis, nama, kelas FROM users WHERE nis = ?", (nis,))
         user = cursor.fetchone()
 
         if user:
@@ -429,7 +426,7 @@ class LocalServerHandler(SimpleHTTPRequestHandler):
                 }
             })
         else:
-            self.send_json_response(200, {"success": False, "message": "NIS atau password salah."})
+            self.send_json_response(200, {"success": False, "message": "Username tidak ditemukan. Silakan daftar terlebih dahulu."})
 
         conn.close()
 
@@ -858,7 +855,7 @@ class LocalServerHandler(SimpleHTTPRequestHandler):
       <table>
         <thead>
           <tr>
-            <th>NIS</th>
+            <th>Username</th>
             <th>Nama Lengkap</th>
             <th>Kelas</th>
             <th>No. WA</th>
