@@ -13,7 +13,7 @@ const VrWorkshop = {
   hotspots: [
     {
       id: 'k3',
-      name: '🛠️ Papan Perkakas (K3 & Alat)',
+      name: '🛠️ Papan Perkakas',
       description: 'Budaya kerja industri 5S/5R, keselamatan kerja (APD), dan ensiklopedia perkakas tangan mekanik TKR.',
       left: 10,
       top: 45,
@@ -30,7 +30,7 @@ const VrWorkshop = {
     },
     {
       id: 'rem',
-      name: '🔴 Stasiun Rem & Spooring (Lift)',
+      name: '🔴 Stasiun Rem & Spooring',
       description: 'Materi teori dan simulasi 3D perakitan kampas rem cakram/tromol, serta evaluasi kuis kelulusan.',
       left: 40,
       top: 70,
@@ -42,7 +42,7 @@ const VrWorkshop = {
     },
     {
       id: 'mesin',
-      name: '⚙️ Stasiun Mesin (Kap Terbuka)',
+      name: '⚙️ Stasiun Mesin',
       description: 'Siklus motor 4-tak, blok silinder, kepala silinder, piston, camshaft, dan perlengkapan mesin otomotif (Materi IV).',
       left: 70,
       top: 50,
@@ -54,7 +54,7 @@ const VrWorkshop = {
     },
     {
       id: 'listrik',
-      name: '⚡ Stasiun Kelistrikan Bodi (Kabinet)',
+      name: '⚡ Stasiun Kelistrikan Bodi',
       description: 'Rangkaian dasar kelistrikan bodi bensin/diesel, relay pengaman, flasher lampu sein, dan klakson.',
       left: 88,
       top: 45,
@@ -93,6 +93,11 @@ const VrWorkshop = {
 
       const tooltip = document.createElement('div');
       tooltip.className = 'vr-hotspot-tooltip';
+      if (hs.left < 25) {
+        tooltip.classList.add('tooltip-left');
+      } else if (hs.left > 75) {
+        tooltip.classList.add('tooltip-right');
+      }
       tooltip.innerHTML = `
         <div class="tooltip-title">${hs.name}</div>
         <div class="tooltip-desc">${hs.description}</div>
