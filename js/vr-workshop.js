@@ -7,6 +7,9 @@
  */
 const VrWorkshop = {
   isActive: false,
+  isDragging: false,
+  startX: 0,
+  currentTranslateX: 0,
   hotspots: [
     {
       id: 'k3',
@@ -132,6 +135,75 @@ const VrWorkshop = {
         }
       });
     }
+
+    // Desktop mousemove panning
+    window.addEventListener('mousemove', (e) => {
+      if (!this.isActive) return;
+      if (window.innerWidth < 768) return; // Skip on mobile
+
+      const scene = document.getElementById('vr-scene');
+      if (!scene) return;
+
+      const mouseX = e.clientX;
+      const pct = mouseX / window.innerWidth; // 0 to 1
+
+      const sceneWidth = scene.getBoundingClientRect().width;
+      const viewportWidth = window.innerWidth;
+      const maxTrans = sceneWidth - viewportWidth;
+
+      if (maxTrans > 0) {
+        const targetX = -pct * maxTrans;
+        scene.style.transform = `translateX(${targetX}px) scale(1.05)`;
+      }
+    });
+
+    // Mobile touch swipe panning
+    const screenVr = document.getElementById('screen-vr');
+    if (screenVr) {
+      screenVr.addEventListener('touchstart', (e) => {
+        if (!this.isActive) return;
+        this.isDragging = true;
+        this.startX = e.touches[0].clientX;
+        const scene = document.getElementById('vr-scene');
+        if (scene) {
+          const transform = window.getComputedStyle(scene).transform;
+          let currentX = 0;
+          if (transform && transform !== 'none') {
+            const matrix = transform.replace(/[^0-9\-.,]/g, '').split(',');
+            currentX = parseFloat(matrix[4]) || 0;
+          }
+          this.currentTranslateX = currentX;
+        }
+      }, { passive: true });
+
+      screenVr.addEventListener('touchmove', (e) => {
+        if (!this.isActive || !this.isDragging) return;
+        const scene = document.getElementById('vr-scene');
+        if (!scene) return;
+
+        const currentX = e.touches[0].clientX;
+        const diffX = currentX - this.startX;
+        let newX = this.currentTranslateX + diffX;
+
+        const sceneWidth = scene.getBoundingClientRect().width;
+        const viewportWidth = window.innerWidth;
+        const maxTrans = sceneWidth - viewportWidth;
+
+        if (newX > 0) newX = 0;
+        if (newX < -maxTrans) newX = -maxTrans;
+
+        scene.style.transition = 'none';
+        scene.style.transform = `translateX(${newX}px) scale(1.05)`;
+      }, { passive: true });
+
+      screenVr.addEventListener('touchend', () => {
+        this.isDragging = false;
+        const scene = document.getElementById('vr-scene');
+        if (scene) {
+          scene.style.transition = 'transform 0.15s ease-out';
+        }
+      });
+    }
   },
 
   /**
@@ -140,6 +212,25 @@ const VrWorkshop = {
   activate() {
     this.isActive = true;
     console.log('[VR] Bengkel Virtual diaktifkan.');
+
+    // Centering and intro zoom effect
+    const scene = document.getElementById('vr-scene');
+    if (scene) {
+      scene.style.transition = 'none';
+      const sceneWidth = scene.getBoundingClientRect().width;
+      const viewportWidth = window.innerWidth;
+      const maxTrans = sceneWidth - viewportWidth;
+      const startX = maxTrans > 0 ? -maxTrans / 2 : 0;
+
+      // Start zoomed in slightly
+      scene.style.transform = `translateX(${startX}px) scale(1.15)`;
+
+      // Animate to normal scale (camera walk-in effect)
+      setTimeout(() => {
+        scene.style.transition = 'transform 1.8s cubic-bezier(0.25, 1, 0.5, 1)';
+        scene.style.transform = `translateX(${startX}px) scale(1.05)`;
+      }, 50);
+    }
   },
 
   /**
@@ -147,6 +238,7 @@ const VrWorkshop = {
    */
   deactivate() {
     this.isActive = false;
+    this.isDragging = false;
     console.log('[VR] Bengkel Virtual dinonaktifkan.');
   }
 };
