@@ -57,7 +57,11 @@ const App = {
       this.checkEnvironment();
 
       // Cek dan terapkan tema tampilan (Dipaksa selalu gelap/dark demi estetika neon cyberpunk)
-      localStorage.setItem('automaster_theme', 'dark');
+      try {
+        localStorage.setItem('automaster_theme', 'dark');
+      } catch (err) {
+        console.warn('[App] Failed to set dark theme in localStorage:', err);
+      }
       document.body.classList.remove('light-theme');
 
       // Inisialisasi AudioManager
@@ -67,7 +71,12 @@ const App = {
 
       // Inisialisasi new modules
       if (typeof AuthManager !== 'undefined') {
-        let savedApiUrl = localStorage.getItem('automaster_api_url');
+        let savedApiUrl = null;
+        try {
+          savedApiUrl = localStorage.getItem('automaster_api_url');
+        } catch (err) {
+          console.warn('[App] Failed to read automaster_api_url from localStorage:', err);
+        }
         if (!savedApiUrl) {
           const hostname = window.location.hostname;
           const isLocal = hostname === 'localhost' || hostname === '127.0.0.1' || 
@@ -81,7 +90,11 @@ const App = {
             // Cloud API (Google Apps Script)
             savedApiUrl = 'https://script.google.com/macros/s/AKfycbyF7CfDM7Bl6QcYESb0WkjhhrysDN4J8RtVedzZvnc2A7UMyWQtGqUMTxHcEw8zaa52/exec';
           }
-          localStorage.setItem('automaster_api_url', savedApiUrl);
+          try {
+            localStorage.setItem('automaster_api_url', savedApiUrl);
+          } catch (err) {
+            console.warn('[App] Failed to save automaster_api_url to localStorage:', err);
+          }
         }
         AuthManager.setApiUrl(savedApiUrl);
         AuthManager.init();
@@ -116,7 +129,9 @@ const App = {
       }
 
       // Inisialisasi sistem progres
-      ProgressManager.init();
+      if (typeof ProgressManager !== 'undefined' && typeof ProgressManager.init === 'function') {
+        ProgressManager.init();
+      }
 
       // Setup network status indicators (online/offline dot)
       this.setupNetworkIndicator();
@@ -3133,4 +3148,8 @@ start "" "${folderPath}\\\\index.html"
 // ════════════════════════════════════════════════════════════
 //  INISIALISASI SAAT DOM SIAP
 // ════════════════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', () => App.init());
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => App.init());
+} else {
+  App.init();
+}
