@@ -3898,21 +3898,67 @@ body.light-theme .ranking-banner-container {
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: var(--sp-md) var(--sp-xl);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.8s ease-in-out;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .banner-slide.active {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+}
+
+/* Linear Gradient Overlay for Banner slides */
+.banner-slide::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(10, 15, 30, 0.95) 0%, rgba(10, 15, 30, 0.7) 45%, rgba(10, 15, 30, 0.3) 70%, rgba(10, 15, 30, 0.9) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Animated Background Image for Banner slides */
+.banner-slide::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: var(--slide-bg);
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  transform: scale(1.0);
+  transition: transform 0.5s ease-out;
+}
+
+.banner-slide.active::after {
+  animation: kenBurns 15s infinite alternate ease-in-out;
+}
+
+@keyframes kenBurns {
+  0% {
+    transform: scale(1.0) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, -0.5%);
+  }
+  100% {
+    transform: scale(1.15) translate(1%, 0.5%);
+  }
 }
 
 .banner-slide-content {
@@ -4021,7 +4067,10 @@ body.light-theme .ranking-banner-container {
     justify-content: center;
     gap: var(--sp-md);
     padding: var(--sp-md) var(--sp-lg);
-    background-image: linear-gradient(180deg, rgba(10, 15, 30, 0.95) 0%, rgba(10, 15, 30, 0.8) 50%, rgba(10, 15, 30, 0.9) 100%) !important;
+  }
+  
+  .banner-slide::before {
+    background: linear-gradient(180deg, rgba(10, 15, 30, 0.95) 0%, rgba(10, 15, 30, 0.8) 50%, rgba(10, 15, 30, 0.9) 100%) !important;
   }
   
   .banner-slide-content {
@@ -6064,6 +6113,19 @@ body.light-theme .level-card-progress-bar {
   transform: translate(-50%, -50%) scale(1.2);
 }
 
+.vr-hotspot-pin.locked {
+  background: rgba(100, 116, 139, 0.6) !important;
+  border-color: #64748b !important;
+  box-shadow: 0 0 10px rgba(100, 116, 139, 0.4) !important;
+}
+
+.vr-hotspot-pin.locked:hover {
+  background: rgba(239, 68, 68, 0.85) !important;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.7) !important;
+  transform: translate(-50%, -50%) scale(1.05) !important;
+}
+
 .vr-hotspot-pin .pin-icon {
   font-size: 20px;
   position: relative;
@@ -6890,7 +6952,7 @@ body.light-theme .level-card-progress-bar {
   /* 1. Fix Banner Slider overlap & clipping */
   .ranking-banner-container {
     height: auto !important;
-    min-height: 250px !important;
+    min-height: 265px !important;
     margin: var(--sp-sm) var(--sp-md) !important;
   }
   
@@ -6899,7 +6961,7 @@ body.light-theme .level-card-progress-bar {
     align-items: flex-start !important;
     justify-content: flex-start !important; /* Align to top to prevent top clipping */
     gap: var(--sp-sm) !important;
-    padding: var(--sp-md) var(--sp-lg) !important;
+    padding: 16px 20px 36px 20px !important;
   }
 
   .banner-slide-content {
