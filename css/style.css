@@ -6132,10 +6132,41 @@ body.light-theme .level-card-progress-bar {
   border-color: rgba(15, 23, 42, 0.92) transparent transparent transparent;
 }
 
+/* Tooltip alignment shifts to prevent viewport clipping */
+.vr-hotspot-tooltip.tooltip-left {
+  left: 0%;
+  transform: translateX(-20px) scale(0.9);
+}
+
+.vr-hotspot-tooltip.tooltip-left::after {
+  left: 42px;
+  transform: none;
+}
+
+.vr-hotspot-tooltip.tooltip-right {
+  left: auto;
+  right: 0%;
+  transform: translateX(20px) scale(0.9);
+}
+
+.vr-hotspot-tooltip.tooltip-right::after {
+  left: auto;
+  right: 42px;
+  transform: none;
+}
+
 .vr-hotspot-pin:hover .vr-hotspot-tooltip {
   opacity: 1;
   transform: translateX(-50%) scale(1);
   pointer-events: auto;
+}
+
+.vr-hotspot-pin:hover .vr-hotspot-tooltip.tooltip-left {
+  transform: translateX(-20px) scale(1);
+}
+
+.vr-hotspot-pin:hover .vr-hotspot-tooltip.tooltip-right {
+  transform: translateX(20px) scale(1);
 }
 
 .vr-hotspot-tooltip .tooltip-title {
@@ -6947,6 +6978,32 @@ body.light-theme .level-card-progress-bar {
   .draggable.component-card {
     gap: 8px !important;
     padding: 6px 10px !important;
+  }
+
+  /* 4. Fix Virtual Workshop Tooltip clipping on mobile */
+  .vr-hotspot-tooltip {
+    width: 230px !important;
+    padding: 12px !important;
+    bottom: 50px !important;
+  }
+  .vr-hotspot-tooltip.tooltip-left {
+    transform: translateX(-15px) scale(0.9) !important;
+  }
+  .vr-hotspot-pin:hover .vr-hotspot-tooltip.tooltip-left {
+    transform: translateX(-15px) scale(1) !important;
+  }
+  .vr-hotspot-tooltip.tooltip-left::after {
+    left: 37px !important;
+  }
+  
+  .vr-hotspot-tooltip.tooltip-right {
+    transform: translateX(15px) scale(0.9) !important;
+  }
+  .vr-hotspot-pin:hover .vr-hotspot-tooltip.tooltip-right {
+    transform: translateX(15px) scale(1) !important;
+  }
+  .vr-hotspot-tooltip.tooltip-right::after {
+    right: 37px !important;
   }
 }
 
