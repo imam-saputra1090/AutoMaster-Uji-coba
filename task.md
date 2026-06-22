@@ -1,17 +1,41 @@
-# Daftar Tugas v3.2 — Audit & Kepatuhan Gim Edukasi Tanpa Login
-
-- [x] Hapus alur login, registrasi, lupa password, dan login guru secara total dari program (Bebas Data Pribadi)
-- [x] Sederhanakan modal profil di `index.html` dan `js/app.js` agar hanya memuat Nama Lengkap dan pilihan Avatar (Hapus NIS, Kelas, WhatsApp, Asal Sekolah)
-- [x] Hilangkan info asal sekolah dari header profil menu utama
-- [x] Konfigurasi start aplikasi (`init()`) agar selalu memuat halaman landing (beranda awal) pada startup untuk memenuhi rubrik juri
-- [ ] Ubah style .level-card & level-progress-bar untuk visual transparan neon
-- [x] Ubah teks tombol utama di bawah halaman landing menjadi "Ayo Main Sekarang! 🎮"
-- [x] Hubungkan tombol "Ayo Main Sekarang! 🎮" agar:
-  - Jika belum ada nama profil, memunculkan modal input nama instan ("Selamat Datang, Mekanik!")
-  - Jika sudah ada nama profil, langsung masuk ke dalam menu permainan utama
-- [x] Hapus seluruh tombol Logout dari header menu utama dan pengaturan
-- [x] Lokalisasi Chart.js ke `js/chart.min.js` (100% Offline-Ready)
-- [x] Lokalisasi Google Fonts (Outfit & Inter) ke `css/fonts/` dan `css/fonts.css` (100% Offline-Ready)
-- [x] Buat gambar sampul utama `thumbnail.png` (840x472 px, ~100 KB, label SMK)
-- [x] Tambahkan sub-panel "Hak Cipta & Lisensi Aset Digital" (Lisensi CC BY-SA 4.0, kredit kementerian, & AI) di tab About
-- [x] Susun Laporan Audit Kepatuhan lengkap di `analysis_results.md`
+- [x] Redesain panel profil `#player-info` dengan tema Cyber HUD (braket sudut neon cyan, scanline avatar, dan grid fusi digital)
+- [x] Perbarui `.xp-bar` progress fill dengan fusi gradien glowing dan tick pembagi segmen vertikal
+- [x] Rancang ulang kartu menu `.menu-card` dengan efek glassmorphic, laser scanline horizontal, dan cyber corners
+- [x] Hubungkan dan implementasikan animasi mikro pada ke-8 logo/ikon SVG kartu menu utama saat di-hover
+- [x] Kembangkan server LAN lokal `local_server.py` berbasis Python & SQLite dengan performa concurrent multi-threading untuk 50 komputer klien
+- [x] Buat antarmuka Dasbor Guru pemantauan lokal di `/dashboard` dengan visualisasi grafik keaktifan (Chart.js) dan ekspor data CSV
+- [x] Modifikasi `JALANKAN_GAME.bat` untuk memicu `local_server.py` secara otomatis
+- [x] Dokumentasikan arsitektur sistem dan panduan pengoperasian laboratorium di `local_server_analysis.md`
+- [x] Verifikasi dan buat laporan rangkuman di `walkthrough.md`
+- [x] Sederhanakan akses Portal Guru & Laporan agar langsung mengarah ke Dasbor Pemantauan tanpa login
+- [x] Terapkan password default `user123` pada registrasi dan login siswa dengan pre-fill otomatis
+- [x] Perbaiki SyntaxError template literal JavaScript dalam python f-string di `local_server.py`
+- [x] Bersihkan proses Python lama pada port 8000 dan jalankan `local_server.py` secara bersih
+- [x] Tambahkan tombol Keluar (Logout) pada panel profil utama untuk kembali ke halaman panduan/landing awal
+- [x] Tambahkan tombol akses Dasbor Guru di halaman landing awal (di bawah tombol Ayo Main Sekarang) dengan proteksi password default `user123`
+- [x] Ubah kartu menu Portal Guru di profil siswa menjadi 'Urutan Prestasi' berisi grafik peringkat siswa tanpa menampilkan nilai numerik (XP/skor)
+- [x] Selaraskan animasi hover kartu menu bawah (4 kartu bawah) agar sama persis dengan kartu atas (scanline laser, cyber brackets, dan glow warna)
+- [x] Implementasikan gaya CSS baru untuk banner slider interaktif (.banner-slides-container, .banner-slide, .banner-slider-dots, dsb.) di style.css
+- [x] Tulis ulang logika updateRankingBanner() di app.js untuk menampilkan 4 slide tujuan pembelajaran berbasis gambar dengan transisi otomatis dan navigasi dots
+- [x] Uji fungsionalitas rotasi otomatis banner, respon klik dots manual, serta keselarasan responsif di perangkat mobile
+- [x] Sesuaikan ukuran menu sama rata dengan banner panjangnya (sejajarkan batas kiri-kanan pada semua ukuran layar)
+- [x] Perbaiki TypeError e.target.closest is not a function di GIM/js/simulation.js dengan fallback e.currentTarget dan helper _getClosestElement
+- [x] Generate Proposal and Storyboard docx files dynamically from templates using python-docx and insert flowchart image
+- [x] Ubah seluruh nama file aset komponen menjadi lowercase snake_case guna menghindari error 404 case-sensitive pada hosting GitHub Pages
+- [x] Perbarui seluruh referensi file gambar komponen di js/data.js agar mengarah ke file lowercase snake_case yang baru
+- [x] Perbaiki background hitam polos pada layar Eksplorasi Bengkel Virtual TKR dengan menambahkan `!important` pada background style `#screen-vr` di style.css
+- [x] Rapikan tampilan banner (Tujuan Pembelajaran) di HP & Desktop:
+    - Pindahkan gradient overlay ke pseudo-element `.banner-slide::before`
+    - Atur background-image menggunakan CSS variable `--slide-bg` untuk diwarisi `.banner-slide::after`
+    - Tambahkan transisi `visibility: hidden` pada slide tidak aktif untuk mencegah penumpukan/overlapping teks
+    - Tambahkan efek zoom & pan premium (Ken Burns animation) pada slide background yang aktif
+    - Atur min-height `265px` dan padding bottom `36px` di HP agar button tidak menutupi dots kontrol
+- [x] Tingkatkan tinggi banner desktop dari 200px → 260px untuk konten yang lebih lega dan proporsional
+- [x] Perbaiki kartu stasiun terkunci di Peta Bengkel:
+    - Tambahkan `.lock-overlay` div dengan ikon 🔒 yang terlihat jelas di tengah kartu (via renderMap)
+    - Atur cursor: not-allowed pada kartu terkunci, cursor: pointer pada kartu terbuka
+    - Tambahkan atribut ARIA (aria-disabled, aria-label) untuk aksesibilitas
+    - Atur opacity SVG grafik dan teks kartu terkunci (grayscale + transparansi)
+- [x] Perbaiki overflow: hidden → visible pada .level-card agar map-pin connector (📍) tidak terpotong
+- [x] Naikkan z-index map-pin ::after dari 10 → 15 agar tampil di atas lock overlay
+- [x] Redupkan warna dan matikan animasi map-pin pada kartu yang masih terkunci
