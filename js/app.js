@@ -352,16 +352,15 @@ start "" "${folderPath}\\\\index.html"
       formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
         const nis = document.getElementById('login-nis').value.trim();
-        const pass = document.getElementById('login-password').value;
         
-        if (!nis || !pass) {
-          this.showToast('⚠️ Silakan isi semua bidang.', 'warning');
+        if (!nis) {
+          this.showToast('⚠️ Silakan isi Nama Pengguna.', 'warning');
           return;
         }
 
         this.showToast('🔄 Mencoba masuk...', 'info');
         try {
-          const res = await AuthManager.login(nis, pass);
+          const res = await AuthManager.login(nis);
           if (res.success) {
             this.showToast(`🎉 ${res.message}`, 'success');
             
@@ -383,14 +382,6 @@ start "" "${folderPath}\\\\index.html"
       });
     }
 
-    // Forgot Password Link Click
-    this._bindClick('link-forgot-password', () => {
-      this._showAlertDialog(
-        'Lupa Password? 🔑',
-        'Untuk keamanan akun Anda, silakan hubungi <strong>Guru Pengampu</strong> di kelas untuk mereset password Anda.<br><br>Guru Anda cukup mengetikkan password baru sementara di spreadsheet database, dan password tersebut akan otomatis terenkripsi saat Anda masuk pertama kali.'
-      );
-    });
-
     // Bypass Login Button Click (Offline Play / Mode Tamu)
     this._bindClick('btn-bypass-login', () => {
       const modal = document.getElementById('modal-name');
@@ -408,16 +399,15 @@ start "" "${folderPath}\\\\index.html"
         const nama = document.getElementById('register-nama').value.trim();
         const kelas = document.getElementById('register-kelas').value;
         const wa = document.getElementById('register-wa').value.trim();
-        const pass = document.getElementById('register-password').value;
 
-        if (!nis || !nama || !kelas || !wa || !pass) {
+        if (!nis || !nama || !kelas || !wa) {
           this.showToast('⚠️ Silakan isi semua bidang.', 'warning');
           return;
         }
 
         this.showToast('🔄 Mendaftarkan akun...', 'info');
         try {
-          const res = await AuthManager.register(nis, nama, kelas, wa, pass);
+          const res = await AuthManager.register(nis, nama, kelas, wa);
           if (res.success) {
             this.showToast(`✅ ${res.message}`, 'success');
             this.showScreen('login');

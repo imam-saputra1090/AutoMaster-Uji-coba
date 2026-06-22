@@ -78,31 +78,24 @@ const AuthManager = {
     return "Desktop";
   },
 
-  /**
-   * Clean NIS format by stripping decimals and non-digits.
-   */
   _cleanNis(nis) {
     if (nis === null || nis === undefined) return '';
-    let str = String(nis).trim();
-    if (str.indexOf('.') !== -1) {
-      str = str.split('.')[0];
-    }
-    return str.replace(/\D/g, "");
+    return String(nis).trim().toLowerCase();
   },
 
   /**
-   * Validate NIS (Nomor Induk Siswa).
-   * Must be numeric, 4-10 digits.
+   * Validate Username.
+   * Must be 2-50 characters.
    * @param {string} nis
    * @returns {{valid: boolean, message: string}}
    */
   _validateNis(nis) {
     if (!nis || typeof nis !== 'string') {
-      return { valid: false, message: 'NIS wajib diisi.' };
+      return { valid: false, message: 'Nama pengguna wajib diisi.' };
     }
     const trimmed = nis.trim();
-    if (!/^\d{4,10}$/.test(trimmed)) {
-      return { valid: false, message: 'NIS harus berupa angka, 4-10 digit.' };
+    if (trimmed.length < 2 || trimmed.length > 50) {
+      return { valid: false, message: 'Nama pengguna harus 2-50 karakter.' };
     }
     return { valid: true, message: '' };
   },
@@ -157,16 +150,7 @@ const AuthManager = {
     return { valid: true, message: '' };
   },
 
-  /**
-   * Register a new student account.
-   * @param {string} nis - Nomor Induk Siswa (4-10 digits)
-   * @param {string} nama - Student name (min 3 chars)
-   * @param {string} kelas - Class/grade
-   * @param {string} wa - WhatsApp number (starts with 08, 10-13 digits)
-   * @param {string} password - Password (min 6 chars)
-   * @returns {Promise<{success: boolean, message: string}>}
-   */
-  async register(nis, nama, kelas, wa, password) {
+  async register(nis, nama, kelas, wa) {
     // Client-side validation
     const nisCheck = this._validateNis(nis);
     if (!nisCheck.valid) return { success: false, message: nisCheck.message };
@@ -181,9 +165,6 @@ const AuthManager = {
     const waCheck = this._validateWa(wa);
     if (!waCheck.valid) return { success: false, message: waCheck.message };
 
-    const passCheck = this._validatePassword(password);
-    if (!passCheck.valid) return { success: false, message: passCheck.message };
-
     // API URL check
     if (!this.API_URL) {
       return { success: false, message: 'API URL belum dikonfigurasi. Hubungi administrator.' };
@@ -196,8 +177,7 @@ const AuthManager = {
         nis: this._cleanNis(nis),
         nama: nama.trim(),
         kelas: kelas.trim(),
-        wa: wa.trim(),
-        password: password
+        wa: wa.trim()
       };
 
       const response = await fetch(url, {
@@ -225,19 +205,10 @@ const AuthManager = {
     }
   },
 
-  /**
-   * Login with NIS and password.
-   * @param {string} nis - Nomor Induk Siswa
-   * @param {string} password - Password
-   * @returns {Promise<{success: boolean, message: string, data: object|null}>}
-   */
-  async login(nis, password) {
+  async login(nis) {
     // Client-side validation
     const nisCheck = this._validateNis(nis);
     if (!nisCheck.valid) return { success: false, message: nisCheck.message, data: null };
-
-    const passCheck = this._validatePassword(password);
-    if (!passCheck.valid) return { success: false, message: passCheck.message, data: null };
 
     // API URL check
     if (!this.API_URL) {
@@ -249,7 +220,6 @@ const AuthManager = {
       const payload = {
         action: 'login',
         nis: this._cleanNis(nis),
-        password: password,
         device: this._getDeviceType(),
         userAgent: navigator.userAgent
       };
@@ -293,7 +263,7 @@ const AuthManager = {
 
       return {
         success: false,
-        message: result.message || 'NIS atau password salah.',
+        message: result.message || 'Nama pengguna salah.',
         data: null
       };
     } catch (err) {
