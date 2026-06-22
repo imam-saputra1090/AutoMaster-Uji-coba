@@ -1404,7 +1404,26 @@ start "" "${folderPath}\\\\index.html"
         <div class="level-card-progress-bar">
           <div class="level-card-progress-fill" style="width: ${finalUnlocked ? completionPercent : 0}%"></div>
         </div>
+        ${!finalUnlocked ? `
+          <div class="lock-overlay" aria-hidden="true">
+            <span class="lock-icon">🔒</span>
+            <span class="lock-text">${isLevel6Special ? 'Selesaikan Level 1–5' : 'Terkunci'}</span>
+          </div>
+        ` : ''}
       `;
+
+      // Styling interaktif
+      if (finalUnlocked) {
+        card.style.cursor = 'pointer';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `Buka Level ${levelId}: ${level.title || ''}`);
+      } else {
+        card.style.cursor = 'not-allowed';
+        card.setAttribute('tabindex', '-1');
+        card.setAttribute('aria-label', `Level ${levelId} terkunci`);
+        card.setAttribute('aria-disabled', 'true');
+      }
 
       container.appendChild(card);
     });
